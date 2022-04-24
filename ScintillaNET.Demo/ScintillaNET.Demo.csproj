@@ -72,6 +72,7 @@
     <Compile Include="Utils\TextManager.cs" />
     <Compile Include="Utils\HotKeyManager.cs" />
     <Compile Include="Utils\SearchManager.cs" />
+    <Compile Include="Utils\Util.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

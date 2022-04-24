@@ -60,20 +60,19 @@
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.collapseAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.expandAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.button1 = new System.Windows.Forms.Button();
             this.PanelSearch = new System.Windows.Forms.Panel();
             this.BtnNextSearch = new System.Windows.Forms.Button();
             this.BtnPrevSearch = new System.Windows.Forms.Button();
             this.BtnCloseSearch = new System.Windows.Forms.Button();
             this.TxtSearch = new System.Windows.Forms.TextBox();
-            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.button1 = new System.Windows.Forms.Button();
-            this.tabLog1 = new System.Windows.Forms.TabPage();
-            this.scintilla1 = new ScintillaNET.Scintilla();
             this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabLog1 = new System.Windows.Forms.TabPage();
             this.menuStrip1.SuspendLayout();
             this.PanelSearch.SuspendLayout();
-            this.tabLog1.SuspendLayout();
             this.tabControl1.SuspendLayout();
+            this.tabLog1.SuspendLayout();
             this.SuspendLayout();
             // 
             // TextPanel
@@ -377,6 +376,22 @@
             this.expandAllToolStripMenuItem.Text = "Expand All";
             this.expandAllToolStripMenuItem.Click += new System.EventHandler(this.expandAllToolStripMenuItem_Click);
             // 
+            // openFileDialog
+            // 
+            this.openFileDialog.DefaultExt = "txt";
+            this.openFileDialog.FileName = "New File";
+            this.openFileDialog.Filter = "All files|*.*";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(679, 45);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 0;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // PanelSearch
             // 
             this.PanelSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -386,7 +401,7 @@
             this.PanelSearch.Controls.Add(this.BtnPrevSearch);
             this.PanelSearch.Controls.Add(this.BtnCloseSearch);
             this.PanelSearch.Controls.Add(this.TxtSearch);
-            this.PanelSearch.Location = new System.Drawing.Point(466, 3);
+            this.PanelSearch.Location = new System.Drawing.Point(458, 3);
             this.PanelSearch.Name = "PanelSearch";
             this.PanelSearch.Size = new System.Drawing.Size(292, 40);
             this.PanelSearch.TabIndex = 10;
@@ -451,59 +466,29 @@
             this.TxtSearch.TextChanged += new System.EventHandler(this.TxtSearch_TextChanged);
             this.TxtSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtSearch_KeyDown);
             // 
-            // openFileDialog
-            // 
-            this.openFileDialog.DefaultExt = "txt";
-            this.openFileDialog.FileName = "New File";
-            this.openFileDialog.Filter = "All files|*.*";
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(679, 45);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // tabLog1
-            // 
-            this.tabLog1.Controls.Add(this.PanelSearch);
-            this.tabLog1.Controls.Add(this.scintilla1);
-            this.tabLog1.Location = new System.Drawing.Point(4, 24);
-            this.tabLog1.Name = "tabLog1";
-            this.tabLog1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabLog1.Size = new System.Drawing.Size(761, 493);
-            this.tabLog1.TabIndex = 0;
-            this.tabLog1.Text = "Log 1";
-            this.tabLog1.UseVisualStyleBackColor = true;
-            this.tabLog1.Click += new System.EventHandler(this.tabPage1_Click_1);
-            this.tabLog1.Enter += new System.EventHandler(this.tabLog1_Enter);
-            // 
-            // scintilla1
-            // 
-            this.scintilla1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.scintilla1.Location = new System.Drawing.Point(-4, 0);
-            this.scintilla1.Name = "scintilla1";
-            this.scintilla1.Size = new System.Drawing.Size(769, 516);
-            this.scintilla1.TabIndex = 0;
-            this.scintilla1.Text = "scintilla1";
-            this.scintilla1.Click += new System.EventHandler(this.scintilla1_Click);
-            // 
             // tabControl1
             // 
             this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabLog1);
-            this.tabControl1.Location = new System.Drawing.Point(0, 93);
+            this.tabControl1.Location = new System.Drawing.Point(8, 93);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(769, 521);
+            this.tabControl1.Size = new System.Drawing.Size(761, 521);
             this.tabControl1.TabIndex = 11;
+            // 
+            // tabLog1
+            // 
+            this.tabLog1.Controls.Add(this.PanelSearch);
+            this.tabLog1.Location = new System.Drawing.Point(4, 24);
+            this.tabLog1.Name = "tabLog1";
+            this.tabLog1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabLog1.Size = new System.Drawing.Size(753, 493);
+            this.tabLog1.TabIndex = 0;
+            this.tabLog1.Text = "Log 1";
+            this.tabLog1.UseVisualStyleBackColor = true;
+            this.tabLog1.Click += new System.EventHandler(this.tabPage1_Click_1);
             // 
             // MainForm
             // 
@@ -527,8 +512,8 @@
             this.menuStrip1.PerformLayout();
             this.PanelSearch.ResumeLayout(false);
             this.PanelSearch.PerformLayout();
-            this.tabLog1.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
+            this.tabLog1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -563,11 +548,6 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
 		private System.Windows.Forms.ToolStripMenuItem uppercaseSelectionToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem lowercaseSelectionToolStripMenuItem;
-		private System.Windows.Forms.Panel PanelSearch;
-		private System.Windows.Forms.Button BtnNextSearch;
-		private System.Windows.Forms.Button BtnPrevSearch;
-		private System.Windows.Forms.Button BtnCloseSearch;
-		private System.Windows.Forms.TextBox TxtSearch;
 		private System.Windows.Forms.OpenFileDialog openFileDialog;
 		private System.Windows.Forms.ToolStripMenuItem selectLineToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem clearSelectionToolStripMenuItem;
@@ -580,9 +560,13 @@
 		private System.Windows.Forms.ToolStripMenuItem indentGuidesItem;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TabPage tabLog1;
+        private System.Windows.Forms.Panel PanelSearch;
+        private System.Windows.Forms.Button BtnNextSearch;
+        private System.Windows.Forms.Button BtnPrevSearch;
+        private System.Windows.Forms.Button BtnCloseSearch;
+        private System.Windows.Forms.TextBox TxtSearch;
         private System.Windows.Forms.TabControl tabControl1;
-        private Scintilla scintilla1;
+        private System.Windows.Forms.TabPage tabLog1;
     }
 }
 

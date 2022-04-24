@@ -24,19 +24,22 @@ namespace ScintillaNET.Demo
         public static Regex Regex_LogContentSpecial = new Regex(@""" = '.*""", RegexOptions.Compiled);
 
         //Getters and setters.
-        public Scintilla ScintillaOrig{ get; set; }
-        public TabControl TabControlOrig { get; set; }
-        public TabPage TabPageOrig { get; set; }
+        public Scintilla ScintillaOrig{ get; }
+        public TabControl TabControlOrig { get; }
+        public TabPage TabPageOrig { get;}
         
         public MainForm()
         {
             InitializeComponent();
             TextArea = new ScintillaNET.Scintilla();
+            
 
-            ScintillaOrig = scintilla1;
             TabControlOrig = tabControl1;
             TabPageOrig = tabLog1;
 
+            LogTab firstLog = new LogTab(TabControlOrig, TabPageOrig, null);
+            firstLog.StartWrite();
+            ScintillaOrig = firstLog.Scintilla;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -72,15 +75,16 @@ namespace ScintillaNET.Demo
 
             // INIT HOTKEYS
             InitHotkeys();
-
-            // Start writer.
-            Logger logger = new Logger(logTextBox_Util, new ConsoleLogReader());
         }
 
+        private void CreateTabControls()
+        {
+
+        }
         private void InitColors()
         {
 
-            TextArea.SetSelectionBackColor(true, IntToColor(0x114D9C));
+            TextArea.SetSelectionBackColor(true, Util.IntToColor(0x114D9C));
             
         }
 
@@ -110,34 +114,31 @@ namespace ScintillaNET.Demo
 
         private void InitSyntaxColoring()
         {
-            
-
-
             // Configure the default style
             TextArea.StyleResetDefault();
             TextArea.Styles[Style.Default].Font = "Consolas";
             TextArea.Styles[Style.Default].Size = 10;
-            TextArea.Styles[Style.Default].BackColor = IntToColor(0x212121);
-            TextArea.Styles[Style.Default].ForeColor = IntToColor(0xFFFFFF);
+            TextArea.Styles[Style.Default].BackColor = Util.IntToColor(0x212121);
+            TextArea.Styles[Style.Default].ForeColor = Util.IntToColor(0xFFFFFF);
             TextArea.StyleClearAll();
 
             // Configure the CPP (C#) lexer styles
-            //TextArea.Styles[Style.Cpp.Identifier].ForeColor = IntToColor(0xD0DAE2);
-            //TextArea.Styles[Style.Cpp.Comment].ForeColor = IntToColor(0xBD758B);
-            //TextArea.Styles[Style.Cpp.CommentLine].ForeColor = IntToColor(0x40BF57);
-            //TextArea.Styles[Style.Cpp.CommentDoc].ForeColor = IntToColor(0x2FAE35);
-            //TextArea.Styles[Style.Cpp.Number].ForeColor = IntToColor(0xFFFF00);
-            //TextArea.Styles[Style.Cpp.String].ForeColor = IntToColor(0xFFFF00);
-            //TextArea.Styles[Style.Cpp.Character].ForeColor = IntToColor(0xE95454);
-            //TextArea.Styles[Style.Cpp.Preprocessor].ForeColor = IntToColor(0x8AAFEE);
-            //TextArea.Styles[Style.Cpp.Operator].ForeColor = IntToColor(0xE0E0E0);
-            //TextArea.Styles[Style.Cpp.Regex].ForeColor = IntToColor(0xff00ff);
-            //TextArea.Styles[Style.Cpp.CommentLineDoc].ForeColor = IntToColor(0x77A7DB);
-            //TextArea.Styles[Style.Cpp.Word].ForeColor = IntToColor(0x48A8EE);
-            //TextArea.Styles[Style.Cpp.Word2].ForeColor = IntToColor(0xF98906);
-            //TextArea.Styles[Style.Cpp.CommentDocKeyword].ForeColor = IntToColor(0xB3D991);
-            //TextArea.Styles[Style.Cpp.CommentDocKeywordError].ForeColor = IntToColor(0xFF0000);
-            //TextArea.Styles[Style.Cpp.GlobalClass].ForeColor = IntToColor(0x48A8EE);
+            //TextArea.Styles[Style.Cpp.Identifier].ForeColor = Util.IntToColor(0xD0DAE2);
+            //TextArea.Styles[Style.Cpp.Comment].ForeColor = Util.IntToColor(0xBD758B);
+            //TextArea.Styles[Style.Cpp.CommentLine].ForeColor = Util.IntToColor(0x40BF57);
+            //TextArea.Styles[Style.Cpp.CommentDoc].ForeColor = Util.IntToColor(0x2FAE35);
+            //TextArea.Styles[Style.Cpp.Number].ForeColor = Util.IntToColor(0xFFFF00);
+            //TextArea.Styles[Style.Cpp.String].ForeColor = Util.IntToColor(0xFFFF00);
+            //TextArea.Styles[Style.Cpp.Character].ForeColor = Util.IntToColor(0xE95454);
+            //TextArea.Styles[Style.Cpp.Preprocessor].ForeColor = Util.IntToColor(0x8AAFEE);
+            //TextArea.Styles[Style.Cpp.Operator].ForeColor = Util.IntToColor(0xE0E0E0);
+            //TextArea.Styles[Style.Cpp.Regex].ForeColor = Util.IntToColor(0xff00ff);
+            //TextArea.Styles[Style.Cpp.CommentLineDoc].ForeColor = Util.IntToColor(0x77A7DB);
+            //TextArea.Styles[Style.Cpp.Word].ForeColor = Util.IntToColor(0x48A8EE);
+            //TextArea.Styles[Style.Cpp.Word2].ForeColor = Util.IntToColor(0xF98906);
+            //TextArea.Styles[Style.Cpp.CommentDocKeyword].ForeColor = Util.IntToColor(0xB3D991);
+            //TextArea.Styles[Style.Cpp.CommentDocKeywordError].ForeColor = Util.IntToColor(0xFF0000);
+            //TextArea.Styles[Style.Cpp.GlobalClass].ForeColor = Util.IntToColor(0x48A8EE);
 
             TextArea.Styles[LoggingLexer.StyleDefault].ForeColor = Color.Wheat;
             TextArea.Styles[LoggingLexer.StyleKeyword].ForeColor = Color.Blue;
@@ -215,10 +216,10 @@ namespace ScintillaNET.Demo
         private void InitNumberMargin()
         {
 
-            TextArea.Styles[Style.LineNumber].BackColor = IntToColor(BACK_COLOR);
-            TextArea.Styles[Style.LineNumber].ForeColor = IntToColor(FORE_COLOR);
-            TextArea.Styles[Style.IndentGuide].ForeColor = IntToColor(FORE_COLOR);
-            TextArea.Styles[Style.IndentGuide].BackColor = IntToColor(BACK_COLOR);
+            TextArea.Styles[Style.LineNumber].BackColor = Util.IntToColor(BACK_COLOR);
+            TextArea.Styles[Style.LineNumber].ForeColor = Util.IntToColor(FORE_COLOR);
+            TextArea.Styles[Style.IndentGuide].ForeColor = Util.IntToColor(FORE_COLOR);
+            TextArea.Styles[Style.IndentGuide].BackColor = Util.IntToColor(BACK_COLOR);
 
             var nums = TextArea.Margins[NUMBER_MARGIN];
             nums.Width = 30;
@@ -232,7 +233,7 @@ namespace ScintillaNET.Demo
         private void InitBookmarkMargin()
         {
 
-            //TextArea.SetFoldMarginColor(true, IntToColor(BACK_COLOR));
+            //TextArea.SetFoldMarginColor(true, Util.IntToColor(BACK_COLOR));
 
             var margin = TextArea.Margins[BOOKMARK_MARGIN];
             margin.Width = 20;
@@ -243,8 +244,8 @@ namespace ScintillaNET.Demo
 
             var marker = TextArea.Markers[BOOKMARK_MARKER];
             marker.Symbol = MarkerSymbol.Circle;
-            marker.SetBackColor(IntToColor(0xFF003B));
-            marker.SetForeColor(IntToColor(0x000000));
+            marker.SetBackColor(Util.IntToColor(0xFF003B));
+            marker.SetForeColor(Util.IntToColor(0x000000));
             marker.SetAlpha(100);
 
         }
@@ -252,8 +253,8 @@ namespace ScintillaNET.Demo
         private void InitCodeFolding()
         {
 
-            TextArea.SetFoldMarginColor(true, IntToColor(BACK_COLOR));
-            TextArea.SetFoldMarginHighlightColor(true, IntToColor(BACK_COLOR));
+            TextArea.SetFoldMarginColor(true, Util.IntToColor(BACK_COLOR));
+            TextArea.SetFoldMarginHighlightColor(true, Util.IntToColor(BACK_COLOR));
 
             // Enable code folding
             TextArea.SetProperty("fold", "1");
@@ -268,8 +269,8 @@ namespace ScintillaNET.Demo
             // Set colors for all folding markers
             for (int i = 25; i <= 31; i++)
             {
-                TextArea.Markers[i].SetForeColor(IntToColor(BACK_COLOR)); // styles for [+] and [-]
-                TextArea.Markers[i].SetBackColor(IntToColor(FORE_COLOR)); // styles for [+] and [-]
+                TextArea.Markers[i].SetForeColor(Util.IntToColor(BACK_COLOR)); // styles for [+] and [-]
+                TextArea.Markers[i].SetBackColor(Util.IntToColor(FORE_COLOR)); // styles for [+] and [-]
             }
 
             // Configure folding markers with respective symbols
@@ -650,10 +651,7 @@ namespace ScintillaNET.Demo
 
         #region Utils
 
-        public static Color IntToColor(int rgb)
-        {
-            return Color.FromArgb(255, (byte)(rgb >> 16), (byte)(rgb >> 8), (byte)rgb);
-        }
+
 
         public void InvokeIfNeeded(Action action)
         {
@@ -677,10 +675,11 @@ namespace ScintillaNET.Demo
         {
 
         }
-        static int TabCount = 2;
+
         private void button1_Click(object sender, EventArgs e)
         {
-            LogTab logTab = new LogTab(TabControlOrig, TabPageOrig, scintilla1);
+            LogTab logTab = new LogTab(TabControlOrig, TabPageOrig, ScintillaOrig);
+            logTab.StartWrite();
         }
 
         private void tabPage1_Click_1(object sender, EventArgs e)
@@ -698,9 +697,5 @@ namespace ScintillaNET.Demo
             
         }
 
-        private void tabLog1_Enter(object sender, EventArgs e)
-        {
-            scintilla1.AppendText("Hey");
-        }
     }
 }

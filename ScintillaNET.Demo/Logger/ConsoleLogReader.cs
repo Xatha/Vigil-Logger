@@ -10,13 +10,21 @@ namespace ScintillaNET.Demo
 {
     public class ConsoleLogReader
     {
-        private static string configFilePath = System.IO.Path.GetFullPath(Path.Combine(@"C:\Users\Luca\AppData\Roaming\r2modmanPlus-local\RiskOfRain2\profiles\Modding\BepInEx\LogOutput.log"));
+        private string configFilePath;
         private int skipLines = 0;
 
-        public ConsoleLogReader()
+        public ConsoleLogReader(string configFilePath = null)
         {
-
+            if (configFilePath == null)
+            {
+                this.configFilePath = System.IO.Path.GetFullPath(Path.Combine(@"C:\Users\Luca\AppData\Roaming\r2modmanPlus-local\RiskOfRain2\profiles\Modding\BepInEx\LogOutput.log"));
+                return;
+            }
+            this.configFilePath = System.IO.Path.GetFullPath(Path.Combine(configFilePath));
         }
+
+        //Gets config log by doing some witch-craft with Get-Content. Usinf this method becuase locked files are a bitch and this bypasses it. 
+        //Badly optimised, should look at it again.
         public System.Collections.ObjectModel.Collection<PSObject> GetConfigLog()
         {
             PowerShell psInstance = PowerShell.Create();
@@ -35,10 +43,9 @@ namespace ScintillaNET.Demo
                 {
                     skipLines += configContent.Count;
                 }
-
                 psInstance.Dispose();
                 return configContent;
-
+                
             }
             psInstance.Dispose();
             return null;

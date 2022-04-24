@@ -10,6 +10,10 @@ namespace ScintillaNET.Demo
     {
         private ConsoleLogReader logReader;
         private TextManager TextArea;
+
+        //Pausing. Controlled on an object-basis.  
+        private bool isPaused = true;
+
         public Logger(TextManager TextArea, ConsoleLogReader logReader)
         {
             this.logReader = logReader;
@@ -17,24 +21,48 @@ namespace ScintillaNET.Demo
 
             InitLogger();
         }
+
+
+        //Resumes logging.
+        public void Resume()
+        {
+            isPaused = false;
+        }
+
+        //Resumes pauses.
+        public void Pause()
+        {
+            isPaused = true;
+        }
+
+
         private async void InitLogger()
         {
+            
             while (true)
             {
-                var logLines = logReader.GetConfigLog();
+                System.Collections.ObjectModel.Collection<System.Management.Automation.PSObject> logLines;
 
-                if (logLines != null)
+                //If paused, pause logging. Saves performance when running multiple objects.
+                if (!isPaused)
                 {
-                    for (int i = 0; i < logLines.Count; i++)
+                    logLines = logReader.GetConfigLog();
+
+                    if (logLines != null)
                     {
-                        LoggerFormat(logLines[i].ToString());
-                        await Task.Delay(10);
+                        for (int i = 0; i < logLines.Count; i++)
+                        {
+                            LoggerFormat(logLines[i].ToString());
+                            await Task.Delay(10);
+                        }
                     }
+                    await Task.Delay(100);
                 }
-                await Task.Delay(10);
+                await Task.Delay(1000);
             }
         }
 
+        //Formats the string and pushes it to the Scintilla.
         private void LoggerFormat(string logLine)
         {
             //Get time, formats it and prints it to log. 
@@ -44,5 +72,6 @@ namespace ScintillaNET.Demo
             //Appends text to console.
             TextArea.AppendText(true, formattedTime + logLine);
         }
+
     }
 }
