@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ScintillaNET.Demo
+namespace ComponentHandlerLibrary
 {
-    internal class ConfigManager
+    abstract class Component : IDestroyableComponent
     {
+
+
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace ScintillaNET.Demo {
+﻿namespace VigilWinFormMain {
 	partial class MainForm {
 		/// <summary>
 		/// Required designer variable.
@@ -60,6 +60,7 @@
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.collapseAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.expandAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.button1 = new System.Windows.Forms.Button();
             this.PanelSearch = new System.Windows.Forms.Panel();
@@ -68,11 +69,9 @@
             this.BtnCloseSearch = new System.Windows.Forms.Button();
             this.TxtSearch = new System.Windows.Forms.TextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabLog1 = new System.Windows.Forms.TabPage();
+            this.button3 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.PanelSearch.SuspendLayout();
-            this.tabControl1.SuspendLayout();
-            this.tabLog1.SuspendLayout();
             this.SuspendLayout();
             // 
             // TextPanel
@@ -91,11 +90,12 @@
             this.FileName.AutoSize = true;
             this.FileName.Font = new System.Drawing.Font("Segoe UI Light", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FileName.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.FileName.Location = new System.Drawing.Point(12, 45);
+            this.FileName.Location = new System.Drawing.Point(12, 42);
             this.FileName.Name = "FileName";
             this.FileName.Size = new System.Drawing.Size(52, 30);
             this.FileName.TabIndex = 1;
             this.FileName.Text = "Title";
+            this.FileName.Click += new System.EventHandler(this.FileName_Click);
             // 
             // menuStrip1
             // 
@@ -105,7 +105,8 @@
             this.fileToolStripMenuItem,
             this.editToolStripMenuItem,
             this.searchToolStripMenuItem,
-            this.viewToolStripMenuItem});
+            this.viewToolStripMenuItem,
+            this.settingsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(769, 27);
@@ -376,6 +377,12 @@
             this.expandAllToolStripMenuItem.Text = "Expand All";
             this.expandAllToolStripMenuItem.Click += new System.EventHandler(this.expandAllToolStripMenuItem_Click);
             // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(70, 23);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            // 
             // openFileDialog
             // 
             this.openFileDialog.DefaultExt = "txt";
@@ -384,11 +391,13 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(679, 45);
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.button1.Location = new System.Drawing.Point(697, 62);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(60, 25);
             this.button1.TabIndex = 0;
-            this.button1.Text = "button1";
+            this.button1.Text = "Add Tab";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -471,31 +480,33 @@
             this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Controls.Add(this.tabLog1);
             this.tabControl1.Location = new System.Drawing.Point(8, 93);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(761, 521);
             this.tabControl1.TabIndex = 11;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
-            // tabLog1
+            // button3
             // 
-            this.tabLog1.Controls.Add(this.PanelSearch);
-            this.tabLog1.Location = new System.Drawing.Point(4, 24);
-            this.tabLog1.Name = "tabLog1";
-            this.tabLog1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabLog1.Size = new System.Drawing.Size(753, 493);
-            this.tabLog1.TabIndex = 0;
-            this.tabLog1.Text = "Log 1";
-            this.tabLog1.UseVisualStyleBackColor = true;
-            this.tabLog1.Click += new System.EventHandler(this.tabPage1_Click_1);
+            this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.button3.ForeColor = System.Drawing.Color.Firebrick;
+            this.button3.Location = new System.Drawing.Point(519, 64);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 13;
+            this.button3.Text = "button3";
+            this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(769, 628);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.FileName);
@@ -504,16 +515,15 @@
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.MinimumSize = new System.Drawing.Size(250, 250);
             this.Name = "MainForm";
-            this.Text = "ScintillaNET Demo App";
+            this.Text = "Xatha Logger";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.PanelSearch.ResumeLayout(false);
             this.PanelSearch.PerformLayout();
-            this.tabControl1.ResumeLayout(false);
-            this.tabLog1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -565,8 +575,10 @@
         private System.Windows.Forms.Button BtnPrevSearch;
         private System.Windows.Forms.Button BtnCloseSearch;
         private System.Windows.Forms.TextBox TxtSearch;
-        private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabLog1;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.TabControl tabControl1;
     }
 }
 

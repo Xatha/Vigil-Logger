@@ -1,9 +1,8 @@
 ﻿using ScintillaNET;
-using System;
 
-namespace ScintillaNET.Demo
+namespace LexerStyleLibrary.Styles
 {
-    internal class LoggingLexer
+    public class LoggingStyle
     {
         public const int StyleDefault = 0,
                      StyleKeyword = 1,
@@ -26,11 +25,7 @@ namespace ScintillaNET.Demo
                             STATE_ERROR = 9,
                             STATE_TIME = 10;
 
-
-        private string keywords;
-
-        public LoggingLexer(Scintilla inScintilla) => keywords = inScintilla.DescribeKeywordSets();
-
+        //public LoggingStyle(Scintilla inScintilla) => keywords = inScintilla.DescribeKeywordSets();
 
         public void Style(Scintilla scintilla, int startPos, int endPos)
         {
@@ -44,8 +39,8 @@ namespace ScintillaNET.Demo
                 {
 
                     char c = (char)scintilla.GetCharAt(startPos),
-                         d = ((startPos > 1) ? (char)scintilla.GetCharAt(startPos + 1) : default(char));
-                //REPROCESS:
+                         d = startPos > 1 ? (char)scintilla.GetCharAt(startPos + 1) : default;
+                    //REPROCESS:
                     switch (state)
                     {
                         case STATE_UNKNOWN:
@@ -177,13 +172,5 @@ namespace ScintillaNET.Demo
             }
         }
 
-
-
-
-
     }
-
-
-
-
 }

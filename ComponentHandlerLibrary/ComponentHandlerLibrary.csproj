@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net4.8</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Component.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Component.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="jacobslusser.ScintillaNET" Version="3.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LexerStyleLibrary\LexerStyleLibrary.csproj" />
+    <ProjectReference Include="..\LogHandlerLibrary\LogHandlerLibrary.csproj" />
+    <ProjectReference Include="..\UtilityLibrary\UtilityLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.Windows.Forms.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

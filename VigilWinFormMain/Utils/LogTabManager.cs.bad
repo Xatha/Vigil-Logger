@@ -1,0 +1,229 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using ScintillaNET.Demo.Utils;
+
+namespace ScintillaNET.Demo.Utils
+{
+    public class LogTabManager
+    {
+        private static int TabCount = 1;
+        private static bool FirstInit = true;
+        private static TabControl tabControl;
+
+
+        private Button exitButton;
+        private readonly TabPage tabPageOrig;
+        private static Scintilla scintillaOrig;
+        private Logger logger;
+        private string filePath;
+
+
+
+
+        public Scintilla Scintilla { get; set; }
+        public TabPage TabPage { get; set; }
+
+        public LogTabManager(TabControl tabControlOrig, string filePath = null)
+        {
+            this.filePath = filePath;
+
+            this.Scintilla = new Scintilla();
+            this.TabPage = new TabPage();
+
+            if (FirstInit == true)
+            {
+                tabControl = tabControlOrig;
+                
+                this.OnFirstInit();
+                this.InitEvents();
+                this.InitExitButton();
+                TabCount++;
+                return;
+            }
+            
+            this.InitObjects();
+            this.InitEvents();
+            this.InitExitButton();
+            TabCount++;
+
+
+        }
+
+        private void InitExitButton()
+        {
+            Console.WriteLine((int)TabPage.Tag);
+            //If i != 0 then assign the step value, otherwise assign 0. This ensures the first tab has correct formatting.
+            var movePosPerTab = 48 * ((int)TabPage.Tag);
+            var tabPos = Point.Add(new Point((10 + movePosPerTab - 20), 91), new Size(0, 0));
+
+            exitButton = new CreateButton(tabPos, new Size(20, 25), TabCount).Button;
+            exitButton.Click += ExitButton_Click;
+            exitButton.Enabled = false;
+            exitButton.Hide();
+
+            
+        }
+
+        private void ExitButton_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("hey");
+        }
+
+
+        #region First Init
+        private void OnFirstInit()
+        {
+            FirstInit = false;
+
+            //Create Tab Object
+
+            var tabPage = this.TabPage;
+            
+            //Add properties
+            tabPage.Location = new System.Drawing.Point(4, 24);
+            tabPage.Name = "tabLog1";
+            tabPage.Padding = new System.Windows.Forms.Padding(3);
+            tabPage.Size = new System.Drawing.Size(753, 493);
+            tabPage.TabIndex = 0;
+            tabPage.Text = "Log " + TabCount.ToString();
+            tabPage.UseVisualStyleBackColor = true;
+            tabPage.Tag = TabCount;
+           
+            var scintilla = this.Scintilla;
+
+            //Add properties
+            scintilla.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top
+                                | System.Windows.Forms.AnchorStyles.Bottom)
+                                | System.Windows.Forms.AnchorStyles.Left)
+                                | System.Windows.Forms.AnchorStyles.Right)));
+            scintilla.Location = new System.Drawing.Point(-4, 0);
+            scintilla.Name = "scintilla1";
+            scintilla.Size = new System.Drawing.Size(769, 516);
+            scintilla.TabIndex = 0;
+            scintilla.Text = "first object :D";
+
+            //Bandaid fix for bad programming. Basically, it makes sure every other scintilla object is created the same as the first one. 
+            scintillaOrig = scintilla;
+
+            //It works without doing this, but I am not sure why, so I am reassinging global variables anyways.
+            this.TabPage = tabPage;
+            this.Scintilla = scintilla;
+
+            this.Scintilla.AppendText("hey");
+            scintilla.AppendText("fucku");
+
+            //Add objects to APP.
+            tabControl.Controls.Add(this.TabPage);
+            TabPage.Controls.Add(this.Scintilla);
+        }
+        #endregion
+
+        private void InitObjects()
+        {
+            //Create Tab Object
+            //Construct object
+            var tabPage = this.TabPage;
+
+            //Add properties
+            tabPage.Location = new System.Drawing.Point(4, 24);
+            tabPage.Name = tabPage.Name + TabCount.ToString();
+            tabPage.Padding = tabPage.Padding;
+            tabPage.Size = tabPage.Size;
+            tabPage.TabIndex = TabCount;
+            tabPage.Text = "Log " + TabCount;
+            tabPage.UseVisualStyleBackColor = true;
+            tabPage.Tag = TabCount;
+
+            //Create Scintilla Object
+            //Construct object
+            var scintilla = this.Scintilla;
+
+            //Add properties
+            scintilla.Anchor = scintillaOrig.Anchor;
+            scintilla.Location = scintillaOrig.Location;
+            scintilla.Name = scintillaOrig.Name + TabCount.ToString();
+            scintilla.Size = scintillaOrig.Size;
+            scintilla.Text = "scintilla " + TabCount.ToString();
+
+
+
+            //It works without doing this, but I am not sure why, so I am reassinging global variables anyways.
+            this.TabPage = tabPage;
+            this.Scintilla = scintilla;
+            
+
+            //Add objects APP.
+            tabControl.Controls.Add(tabPage);
+            this.TabPage.Controls.Add(scintilla);
+        }
+
+        #region Events
+        private void InitEvents()
+        {
+            Scintilla.TextChanged += (sender, e) =>
+            {
+                Scintilla.LineScroll(Scintilla.Lines.Count, 0);
+            };
+
+            tabControl.MouseMove += (sender, e) =>
+            {   
+                for (int i = 0; i < tabControl.TabCount; i++)
+                {
+                    if (tabControl.GetTabRect(i).Contains(e.X, e.Y) && (tabControl.SelectedIndex == i) && (int)this.exitButton.Tag == (int)this.TabPage.Tag)
+                    {
+
+                        exitButton.Show();
+                    }
+                    else if (true)
+                       {
+
+                    }
+                }
+
+            };
+        }
+
+
+        private void TabControl_MouseHover(object sender, EventArgs e)
+        {
+            Point mouseCoords = System.Windows.Forms.Cursor.Position;
+            var rectSize = new System.Drawing.Size(1,1);
+
+            Rectangle mouseRect = new Rectangle(mouseCoords,rectSize);
+
+            for (int i = 0; i < tabControl.TabCount; i++)
+            {
+                Console.WriteLine(i + "\r");
+                if (tabControl.GetTabRect(0).Contains(mouseCoords.X, mouseCoords.Y))
+                {
+                    Console.WriteLine(mouseRect.ToString() + "\r");
+                    Console.WriteLine(this.TabPage.Name);
+                }
+            }
+
+
+
+            
+            
+        }
+
+        private void Scintilla_TextChanged(object sender, EventArgs e)
+        {
+            //Auto Scrolling.
+            Scintilla.LineScroll(Scintilla.Lines.Count, 0);
+        }
+        #endregion
+
+
+
+        public void StartLogger(string path)
+        {
+            this.logger = new Logger(new TextManager(Scintilla), new ConsoleLogReader(path));
+        }
+    }
+}

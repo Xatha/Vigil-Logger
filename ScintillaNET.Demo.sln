@@ -1,7 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScintillaNET.Demo", "ScintillaNET.Demo\ScintillaNET.Demo.csproj", "{69CE0FB9-99CF-4A40-A0AB-E39F5050054E}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComponentHandlerLibrary", "ComponentHandlerLibrary\ComponentHandlerLibrary.csproj", "{EB377648-5CDF-40B2-9ECF-875744A6C33A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogHandlerLibrary", "LogHandlerLibrary\LogHandlerLibrary.csproj", "{005DFF26-8288-4EFB-AF41-34769130F42A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LexerStyleLibrary", "LexerStyleLibrary\LexerStyleLibrary.csproj", "{17280B73-E400-4685-8D50-FF3E7BFBBB9E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityLibrary", "UtilityLibrary\UtilityLibrary.csproj", "{9F27C4FF-1D7A-478F-BA09-E0122DFDA961}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VigilWinFormMain", "VigilWinFormMain\VigilWinFormMain.csproj", "{B1246993-3C22-4E4E-B985-9C5FA9EE0387}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,12 +19,31 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{69CE0FB9-99CF-4A40-A0AB-E39F5050054E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{69CE0FB9-99CF-4A40-A0AB-E39F5050054E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{69CE0FB9-99CF-4A40-A0AB-E39F5050054E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{69CE0FB9-99CF-4A40-A0AB-E39F5050054E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB377648-5CDF-40B2-9ECF-875744A6C33A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB377648-5CDF-40B2-9ECF-875744A6C33A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB377648-5CDF-40B2-9ECF-875744A6C33A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB377648-5CDF-40B2-9ECF-875744A6C33A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{005DFF26-8288-4EFB-AF41-34769130F42A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{005DFF26-8288-4EFB-AF41-34769130F42A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{005DFF26-8288-4EFB-AF41-34769130F42A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{005DFF26-8288-4EFB-AF41-34769130F42A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17280B73-E400-4685-8D50-FF3E7BFBBB9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17280B73-E400-4685-8D50-FF3E7BFBBB9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17280B73-E400-4685-8D50-FF3E7BFBBB9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17280B73-E400-4685-8D50-FF3E7BFBBB9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F27C4FF-1D7A-478F-BA09-E0122DFDA961}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F27C4FF-1D7A-478F-BA09-E0122DFDA961}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F27C4FF-1D7A-478F-BA09-E0122DFDA961}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F27C4FF-1D7A-478F-BA09-E0122DFDA961}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1246993-3C22-4E4E-B985-9C5FA9EE0387}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1246993-3C22-4E4E-B985-9C5FA9EE0387}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1246993-3C22-4E4E-B985-9C5FA9EE0387}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1246993-3C22-4E4E-B985-9C5FA9EE0387}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6C4BC4FD-BC5B-4508-B543-C31A3A204137}
 	EndGlobalSection
 EndGlobal

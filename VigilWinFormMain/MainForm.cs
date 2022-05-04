@@ -1,51 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
-using ScintillaNET;
 using ScintillaNET.Demo.Utils;
-using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using ComponentHandlerLibrary;
+using LexerStyleLibrary.Styles;
+using LogHandlerLibrary;
+using ScintillaNET;
+using ComponentHandlerLibrary.Utils;
 
-namespace ScintillaNET.Demo
+namespace VigilWinFormMain
 {
     public partial class MainForm : Form
     {
-
-        public ScintillaNET.Scintilla TextArea;
-        public TextManager logTextBox_Util;
-
+        public Scintilla TextArea;
         public static Regex Regex_LogType = new Regex(@"\[[^\]]*?\]", RegexOptions.Compiled);
         public static Regex Regex_LogContentSpecial = new Regex(@""" = '.*""", RegexOptions.Compiled);
 
         //Getters and setters.
-        public Scintilla ScintillaOrig{ get; }
-        public TabControl TabControlOrig { get; }
-        public TabPage TabPageOrig { get;}
-        
+        public Scintilla ScintillaOrig { get; }
+        public TabControl TabControlOrig { get; set; }
+        public TabPage TabPageOrig { get; }
+
         public MainForm()
         {
             InitializeComponent();
             TextArea = new ScintillaNET.Scintilla();
-            
 
-            TabControlOrig = tabControl1;
-            TabPageOrig = tabLog1;
-
-            LogTab firstLog = new LogTab(TabControlOrig, TabPageOrig, null);
-            firstLog.StartWrite();
-            ScintillaOrig = firstLog.Scintilla;
         }
+
+      
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             // INIT OBJECTS
-            logTextBox_Util = new TextManager(TextArea);
+            //logTextBox_Util = new TextManager(TextArea);
 
             // CREATE CONTROL
             TextPanel.Controls.Add(TextArea);
@@ -75,6 +65,65 @@ namespace ScintillaNET.Demo
 
             // INIT HOTKEYS
             InitHotkeys();
+
+
+            TabControlOrig = tabControl1;
+            var tabComponent = new TabComponent(TabControlOrig);
+            tabComponent.Add(new ScintillaLogWriterComponent()
+            {
+                FilePath = @"C:\Users\Luca\Desktop\testfile.txt"
+            });
+
+
+            //LogTabManager firstLog = new LogTabManager(TabControlOrig);
+            //firstLog.StartLogger(@"C:\Users\Luca\AppData\Roaming\r2modmanPlus-local\RiskOfRain2\profiles\Modding\BepInEx\LogOutput.log");
+            tabControl1.DrawItem += TabControl1_DrawItem;
+
+        }
+
+        private void TabControl1_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            TabPage CurrentTab = tabControl1.TabPages[e.Index];
+            Rectangle ItemRect = tabControl1.GetTabRect(e.Index);
+            SolidBrush FillBrush = new SolidBrush(Color.Red);
+            SolidBrush TextBrush = new SolidBrush(Color.White);
+            StringFormat sf = new StringFormat();
+            sf.Alignment = StringAlignment.Center;
+            sf.LineAlignment = StringAlignment.Center;
+
+            //If we are currently painting the Selected TabItem we'll
+            //change the brush colors and inflate the rectangle.
+            if (System.Convert.ToBoolean(e.State & DrawItemState.Selected))
+            {
+                FillBrush.Color = Color.Black;
+                TextBrush.Color = Color.Red;
+                ItemRect.Inflate(2, 2);
+            }
+
+            //Set up rotation for left and right aligned tabs
+            if (tabControl1.Alignment == TabAlignment.Left || tabControl1.Alignment == TabAlignment.Right)
+            {
+                float RotateAngle = 90;
+                if (tabControl1.Alignment == TabAlignment.Left)
+                    RotateAngle = 270;
+                PointF cp = new PointF(ItemRect.Left + (ItemRect.Width / 2), ItemRect.Top + (ItemRect.Height / 2));
+                e.Graphics.TranslateTransform(cp.X, cp.Y);
+                e.Graphics.RotateTransform(RotateAngle);
+                ItemRect = new Rectangle(-(ItemRect.Height / 2), -(ItemRect.Width / 2), ItemRect.Height, ItemRect.Width);
+            }
+
+            //Next we'll paint the TabItem with our Fill Brush
+            e.Graphics.FillRectangle(FillBrush, ItemRect);
+
+            //Now draw the text.
+            e.Graphics.DrawString(CurrentTab.Text, e.Font, TextBrush, (RectangleF)ItemRect, sf);
+
+            //Reset any Graphics rotation
+            e.Graphics.ResetTransform();
+
+            //Finally, we should Dispose of our brushes.
+            FillBrush.Dispose();
+            TextBrush.Dispose();
         }
 
         private void CreateTabControls()
@@ -83,9 +132,7 @@ namespace ScintillaNET.Demo
         }
         private void InitColors()
         {
-
             TextArea.SetSelectionBackColor(true, Util.IntToColor(0x114D9C));
-            
         }
 
         private void InitHotkeys()
@@ -114,6 +161,7 @@ namespace ScintillaNET.Demo
 
         private void InitSyntaxColoring()
         {
+
             // Configure the default style
             TextArea.StyleResetDefault();
             TextArea.Styles[Style.Default].Font = "Consolas";
@@ -140,26 +188,26 @@ namespace ScintillaNET.Demo
             //TextArea.Styles[Style.Cpp.CommentDocKeywordError].ForeColor = Util.IntToColor(0xFF0000);
             //TextArea.Styles[Style.Cpp.GlobalClass].ForeColor = Util.IntToColor(0x48A8EE);
 
-            TextArea.Styles[LoggingLexer.StyleDefault].ForeColor = Color.Wheat;
-            TextArea.Styles[LoggingLexer.StyleKeyword].ForeColor = Color.Blue;
-            TextArea.Styles[LoggingLexer.StyleIdentifier].ForeColor = Color.Teal;
-            TextArea.Styles[LoggingLexer.StyleNumber].ForeColor = Color.Purple;
-            TextArea.Styles[LoggingLexer.StyleString].ForeColor = Color.Red;
+            TextArea.Styles[LoggingStyle.StyleDefault].ForeColor = Color.Wheat;
+            TextArea.Styles[LoggingStyle.StyleKeyword].ForeColor = Color.Blue;
+            TextArea.Styles[LoggingStyle.StyleIdentifier].ForeColor = Color.Teal;
+            TextArea.Styles[LoggingStyle.StyleNumber].ForeColor = Color.Purple;
+            TextArea.Styles[LoggingStyle.StyleString].ForeColor = Color.Red;
 
-            TextArea.Styles[LoggingLexer.StyleDebug].ForeColor = Color.Orange;
+            TextArea.Styles[LoggingStyle.StyleDebug].ForeColor = Color.Orange;
 
-            TextArea.Styles[LoggingLexer.StyleInfo].ForeColor = Color.LightGray;
-            TextArea.Styles[LoggingLexer.StyleMessage].ForeColor = Color.SlateGray;
-            TextArea.Styles[LoggingLexer.StyleWarning].ForeColor = Color.Yellow;
-            TextArea.Styles[LoggingLexer.StyleError].ForeColor = Color.Red;
-            TextArea.Styles[LoggingLexer.StyleTime].ForeColor = Color.Green;
+            TextArea.Styles[LoggingStyle.StyleInfo].ForeColor = Color.LightGray;
+            TextArea.Styles[LoggingStyle.StyleMessage].ForeColor = Color.SlateGray;
+            TextArea.Styles[LoggingStyle.StyleWarning].ForeColor = Color.Yellow;
+            TextArea.Styles[LoggingStyle.StyleError].ForeColor = Color.Red;
+            TextArea.Styles[LoggingStyle.StyleTime].ForeColor = Color.Green;
             TextArea.Lexer = Lexer.Container;
 
 
             //TextArea.SetKeywords(0, "class extends implements import interface new case do while else if for in switch throw get set function var try catch finally while with default break continue delete return each const namespace package include use is as instanceof typeof author copy default deprecated eventType example exampleText exception haxe inheritDoc internal link mtasc mxmlc param private return see serial serialData serialField since throws usage version langversion playerversion productversion dynamic private public partial static intrinsic internal native override protected AS3 final super this arguments null Infinity NaN undefined true false abstract as base bool break by byte case catch char checked class const continue decimal default delegate do double descending explicit event extern else enum false finally fixed float for foreach from goto group if implicit in int interface internal into is lock long new null namespace object operator out override orderby params private protected public readonly ref return switch struct sbyte sealed short sizeof stackalloc static string select this throw true try typeof uint ulong unchecked unsafe ushort using var virtual volatile void while where yield");
             //TextArea.SetKeywords(1, "void Null ArgumentError arguments Array Boolean Class Date DefinitionError Error EvalError Function int Math Namespace Number Object RangeError ReferenceError RegExp SecurityError String SyntaxError TypeError uint XML XMLList Boolean Byte Char DateTime Decimal Double Int16 Int32 Int64 IntPtr SByte Single UInt16 UInt32 UInt64 UIntPtr Void Path File System Windows Forms ScintillaNET");
 
-            LoggingLexer loggingLexer = new LoggingLexer(TextArea);
+            LoggingStyle loggingLexer = new LoggingStyle();
             TextArea.StyleNeeded += (s, se) =>
             {
                 var startPos = TextArea.GetEndStyled();
@@ -169,16 +217,13 @@ namespace ScintillaNET.Demo
             };
         }
 
-        
-
         private void OnTextChanged(object sender, EventArgs e)
         {
+            //Auto Scrolling.
             TextArea.LineScroll(TextArea.Lines.Count, 0);
-
-            
         }
 
-    
+
 
         #region Numbers, Bookmarks, Code Folding
 
@@ -675,16 +720,30 @@ namespace ScintillaNET.Demo
         {
 
         }
-
         private void button1_Click(object sender, EventArgs e)
         {
-            LogTab logTab = new LogTab(TabControlOrig, TabPageOrig, ScintillaOrig);
-            logTab.StartWrite();
+            var tabComponent = new TabComponent(TabControlOrig);
+            tabComponent.Add(new ScintillaLogWriterComponent()
+            {
+                FilePath = @"C:\Users\Luca\Desktop\testfile.txt"
+            });
+            //var tabComponent = new TabComponent(TabControlOrig);
+            //tabComponent.Controls.Add(new ScintillaComponent());
+            //var s = new ScintillaComponent();
+            //LogTabManager logTabManager = new LogTabManager(TabControlOrig, @"C:\Users\Luca\Desktop\Test\test.txt");
+            //logTabManager.StartLogger(@"C:\Users\Luca\AppData\Roaming\r2modmanPlus-local\RiskOfRain2\profiles\Modding\BepInEx\LogOutput.log");
+        }
+
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("hey!");
+            //new CreateButton(new Point(40, 92), new Size(20, 25));
         }
 
         private void tabPage1_Click_1(object sender, EventArgs e)
         {
-            
+
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -694,8 +753,22 @@ namespace ScintillaNET.Demo
 
         private void scintilla1_Click(object sender, EventArgs e)
         {
-            
+
         }
 
+        private void FileName_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void metroTabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
