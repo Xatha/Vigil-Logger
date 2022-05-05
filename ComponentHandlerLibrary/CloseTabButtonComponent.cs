@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using ComponentHandlerLibrary.Utils.Button;
 using ScintillaNET;
 
 namespace ComponentHandlerLibrary
@@ -77,13 +78,8 @@ namespace ComponentHandlerLibrary
 
         internal new void Update()
         {
-            //Some logic to determine the placement of the button. This was painful to make.
-            var thisTabCountIndex = ComponentCollections.TabComponentCollection.IndexOf(tabComponent);
-            var movePosPerTab = 48 * (thisTabCountIndex + 1);
-            var tabPos = Point.Add(new Point((10 + movePosPerTab - 20), 91), new Size(0, 0));
-
             //Sets the button's location to the new location.
-            this.Location = tabPos;
+            this.Location = this.CloseTabButtonPosition();
         }
 
         //Destroy our object.

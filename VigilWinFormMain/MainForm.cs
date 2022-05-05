@@ -8,22 +8,18 @@ using ComponentHandlerLibrary;
 using LexerStyleLibrary.Styles;
 using LogHandlerLibrary;
 using ScintillaNET;
-using ComponentHandlerLibrary.Utils;
 using UtilityLibrary;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using ComponentHandlerLibrary.Utils;
+using ComponentHandlerLibrary.Utils.Button;
 
 namespace VigilWinFormMain
 {
     public partial class MainForm : Form
     {
-        public Scintilla TextArea;
-        public static Regex Regex_LogType = new Regex(@"\[[^\]]*?\]", RegexOptions.Compiled);
-        public static Regex Regex_LogContentSpecial = new Regex(@""" = '.*""", RegexOptions.Compiled);
+        private Scintilla TextArea;
 
-        //Getters and setters.
-        public Scintilla ScintillaOrig { get; }
-        public TabControl TabControlOrig { get; set; }
-        public TabPage TabPageOrig { get; }
+        private TabControl TabControlMain { get; set; }
 
         public MainForm()
         {
@@ -32,14 +28,19 @@ namespace VigilWinFormMain
         }
 
         private void MainForm_Load(object sender, EventArgs e)
-        {
-            // INIT OBJECTS
-            //logTextBox_Util = new TextManager(TextArea);
+        { 
+            // Assing Properties
+            TabControlMain = tabControl1;
 
-            // CREATE CONTROL
-            TextPanel.Controls.Add(TextArea);
+            // Initialise first-time objects and helpers.
+            new TabControlHelper(TabControlMain);
 
+            new TabComponent(TabControlMain, new ScintillaLogWriterComponent
+            {
+                FilePath = @"C:\Users\Luca\Desktop\testfile.txt"
+            });
 
+            new OpenTabButtonComponent(TabControlMain, OpenTabButtonUtil.OpenTabButtonPosition(), new Size(75, 25));
 
             // STYLING
             InitColors();
@@ -58,35 +59,6 @@ namespace VigilWinFormMain
 
             // INIT HOTKEYS
             InitHotkeys();
-
-
-            TabControlOrig = tabControl1;
-            var tabComponent = new TabComponent(TabControlOrig, new ScintillaLogWriterComponent
-            {
-                FilePath = @"C:\Users\Luca\Desktop\testfile.txt"
-            });
-
-
-            //Some logic to determine the placement of the button. This was painful to make.
-            var thisTabCountIndex = ComponentCollections.TabComponentCollection.Count - 1;
-            var movePosPerTab = 48 * (thisTabCountIndex + 1);
-            var tabPos = Point.Add(new Point((10 + movePosPerTab - 20 + 15), 92), new Size(0, 0));
-
-            new OpenTabButtonComponent(TabControlOrig, tabPos, new Size(75, 25));
-
-            tabControl1.MouseClick += (object s, MouseEventArgs clickEvent) =>
-            {
-                if (clickEvent.Button == MouseButtons.Middle)
-                {
-                    var x = tabControl1.FindControlFromLocation<TabComponent>(clickEvent.Location);
-                    if (x == ComponentCollections.TabComponentCollection[0])
-                    {
-                        return;
-                    }
-                    ComponentDestructionHandler.DestroyParentAndChildren(x);
-                    Console.WriteLine($"{clickEvent.Button} was pressed while hovering over {x}!");
-                }
-            };
         }
 
         private void InitColors()
@@ -650,11 +622,6 @@ namespace VigilWinFormMain
         }
 
         #endregion
-
-        #region Utils
-
-
-
         public void InvokeIfNeeded(Action action)
         {
             if (this.InvokeRequired)
@@ -665,74 +632,6 @@ namespace VigilWinFormMain
             {
                 action.Invoke();
             }
-        }
-
-
-
-
-
-        #endregion
-
-        private void tabPage1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            var movePosPerTab = 48 * (ComponentCollections.TabComponentCollection.Count + 1);
-            var tabPos = Point.Add(new Point((10 + movePosPerTab - 20), 91), new Size(0, 0));
-
-            new TabComponent(TabControlOrig, new Scintilla(), new CloseTabButtonComponent(tabPos, new Size(20, 25)));
-
-            //new TabComponent(TabControlOrig, new ScintillaLogWriterComponent()
-            //{
-            //    FilePath = @"C:\Users\Luca\Desktop\Test\test.txt"
-            //}, new CloseTabButtonComponent(tabPos, new Size(20, 25)));
-
-
-            //var tabComponent = new TabComponent(TabControlOrig);
-            //tabComponent.Controls.Add(new ScintillaComponent());
-            //var s = new ScintillaComponent();
-            //LogTabManager logTabManager = new LogTabManager(TabControlOrig, @"C:\Users\Luca\Desktop\Test\test.txt");
-            //logTabManager.StartLogger(@"C:\Users\Luca\AppData\Roaming\r2modmanPlus-local\RiskOfRain2\profiles\Modding\BepInEx\LogOutput.log");
-        }
-
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            Console.WriteLine("hey!");
-            //new CreateButton(new Point(40, 92), new Size(20, 25));
-        }
-
-        private void tabPage1_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void scintilla1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void FileName_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void metroTabControl1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

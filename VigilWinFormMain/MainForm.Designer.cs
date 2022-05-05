@@ -93,7 +93,6 @@
             this.FileName.Size = new System.Drawing.Size(52, 30);
             this.FileName.TabIndex = 1;
             this.FileName.Text = "Title";
-            this.FileName.Click += new System.EventHandler(this.FileName_Click);
             // 
             // menuStrip1
             // 
@@ -471,7 +470,6 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(761, 521);
             this.tabControl1.TabIndex = 11;
-            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // MainForm
             // 
