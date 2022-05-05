@@ -5,19 +5,48 @@ using ScintillaNET;
 
 namespace ComponentHandlerLibrary
 {
-    internal class CloseTabButtonComponent : Button
+    public class CloseTabButtonComponent : Button
     {
-        private readonly TabComponent tabComponent;
+        internal TabComponent tabComponent { get; set; }
+        
         //Constructor
-        internal CloseTabButtonComponent(System.Drawing.Point location, System.Drawing.Size size, TabComponent tabComponent)
+        public CloseTabButtonComponent(System.Drawing.Point location, System.Drawing.Size size, TabComponent tabComponent)
         {
             this.tabComponent = tabComponent;
 
             ComponentCollections.CloseTabButtonComponentCollection.Add(this);
 
             CreateButon(location, size);
+            this.BringToFront();
+            this.Hide();
             AppendEvents();
         }
+        public CloseTabButtonComponent(System.Drawing.Point location, System.Drawing.Size size)
+        {
+            this.tabComponent = tabComponent;
+
+            ComponentCollections.CloseTabButtonComponentCollection.Add(this);
+
+            CreateButon(location, size);
+            this.BringToFront();
+            this.Hide();
+            AppendEvents();
+        }
+        public CloseTabButtonComponent()
+        {
+            var movePosPerTab = 48 * (ComponentCollections.TabComponentCollection.Count + 1);
+            var tabPos = Point.Add(new Point((10 + movePosPerTab - 20), 91), new Size(0, 0));
+
+            this.tabComponent = tabComponent;
+
+            ComponentCollections.CloseTabButtonComponentCollection.Add(this);
+
+            CreateButon(tabPos, new Size(20, 25));
+            this.BringToFront();
+            this.Hide();
+            AppendEvents();
+        }
+
 
         ~CloseTabButtonComponent()
         {
@@ -43,6 +72,18 @@ namespace ComponentHandlerLibrary
 
             //Application.OpenForms[0] is the same as referencing mainForm
             Application.OpenForms[0].Controls.Add(button);
+            
+        }
+
+        internal new void Update()
+        {
+            //Some logic to determine the placement of the button. This was painful to make.
+            var thisTabCountIndex = ComponentCollections.TabComponentCollection.IndexOf(tabComponent);
+            var movePosPerTab = 48 * (thisTabCountIndex + 1);
+            var tabPos = Point.Add(new Point((10 + movePosPerTab - 20), 91), new Size(0, 0));
+
+            //Sets the button's location to the new location.
+            this.Location = tabPos;
         }
 
         //Destroy our object.
@@ -61,12 +102,6 @@ namespace ComponentHandlerLibrary
             this.Dispose();
 
         }
-
-        //Destroy parent and all its atteched objects..
-        private void DestroyAll()
-        {
-            ComponentDestructionHandler.DestroyParentAndChildren(tabComponent);
-        }
         #region Events
         //Appends our listener functions to the events
         private void AppendEvents()
@@ -82,12 +117,10 @@ namespace ComponentHandlerLibrary
 
         }
 
+        //Destroy parent and all its atteched objects..
         private void event_onClickRemoveComponentAndParent(object sender, EventArgs e)
         {
-            DestroyAll();
-            //this.Destroy();
-            //tabComponent.Destroy();
-            
+            ComponentDestructionHandler.DestroyParentAndChildren(tabComponent);
         }
 
         #endregion

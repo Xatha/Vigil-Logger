@@ -10,6 +10,7 @@ using LogHandlerLibrary;
 using ScintillaNET;
 using ComponentHandlerLibrary.Utils;
 
+
 namespace VigilWinFormMain
 {
     public partial class MainForm : Form
@@ -28,9 +29,8 @@ namespace VigilWinFormMain
             InitializeComponent();
             TextArea = new ScintillaNET.Scintilla();
 
-        }
 
-      
+        }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -68,16 +68,23 @@ namespace VigilWinFormMain
 
 
             TabControlOrig = tabControl1;
-            var tabComponent = new TabComponent(TabControlOrig);
-            tabComponent.Add(new ScintillaLogWriterComponent()
+            var tabComponent = new TabComponent(TabControlOrig, new ScintillaLogWriterComponent
             {
                 FilePath = @"C:\Users\Luca\Desktop\testfile.txt"
             });
 
 
+
             //LogTabManager firstLog = new LogTabManager(TabControlOrig);
             //firstLog.StartLogger(@"C:\Users\Luca\AppData\Roaming\r2modmanPlus-local\RiskOfRain2\profiles\Modding\BepInEx\LogOutput.log");
             tabControl1.DrawItem += TabControl1_DrawItem;
+            //var openTabButton = new OpenTabButtonComponent(TabControlOrig, new Point(480, 64), new Size(50, 50));
+            //Some logic to determine the placement of the button. This was painful to make.
+            var thisTabCountIndex = ComponentCollections.TabComponentCollection.Count - 1;
+            var movePosPerTab = 48 * (thisTabCountIndex + 1);
+            var tabPos = Point.Add(new Point((10 + movePosPerTab - 20 + 15), 92), new Size(0, 0));
+
+            new OpenTabButtonComponent(TabControlOrig, tabPos, new Size(75, 25));
 
         }
 
@@ -720,13 +727,15 @@ namespace VigilWinFormMain
         {
 
         }
+
         private void button1_Click(object sender, EventArgs e)
         {
-            var tabComponent = new TabComponent(TabControlOrig);
-            tabComponent.Add(new ScintillaLogWriterComponent()
+            var movePosPerTab = 48 * (ComponentCollections.TabComponentCollection.Count + 1);
+            var tabPos = Point.Add(new Point((10 + movePosPerTab - 20), 91), new Size(0, 0));
+            var tab = new TabComponent(TabControlOrig, new ScintillaLogWriterComponent()
             {
-                FilePath = @"C:\Users\Luca\Desktop\testfile.txt"
-            });
+                FilePath = @"C:\Users\Luca\Desktop\Test\test.txt"
+            }, new CloseTabButtonComponent(tabPos, new Size(20, 25)));
             //var tabComponent = new TabComponent(TabControlOrig);
             //tabComponent.Controls.Add(new ScintillaComponent());
             //var s = new ScintillaComponent();

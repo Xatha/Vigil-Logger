@@ -7,5 +7,7 @@ namespace ComponentHandlerLibrary
         public static List<TabComponent> TabComponentCollection { get; set; } = new List<TabComponent>();
         public static List<ScintillaComponent> ScintillaComponentCollection { get; set; } = new List<ScintillaComponent>();
         internal static List<CloseTabButtonComponent> CloseTabButtonComponentCollection { get; set; } = new List<CloseTabButtonComponent>();
+        internal static List<OpenTabButtonComponent> OpenTabButtonComponentCollection { get; set; } = new List<OpenTabButtonComponent>();
+
     }
 }

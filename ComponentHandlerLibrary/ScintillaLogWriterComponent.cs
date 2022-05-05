@@ -8,7 +8,6 @@ namespace ComponentHandlerLibrary
 {
     public class ScintillaLogWriterComponent : ScintillaComponent
     {
-        private readonly ScintillaComponent scintilla;
         private readonly LogReaderHandler reader;
         private bool isDestroying = false;
 
@@ -26,8 +25,6 @@ namespace ComponentHandlerLibrary
         
         public new void Destroy()
         {
-            Console.WriteLine("destroying");
-
             isDestroying = true;
             //reader.Destroy();
             ////Remove TabComponent from list.
@@ -48,7 +45,6 @@ namespace ComponentHandlerLibrary
             while (!isDestroying)
             {
             START:
-                Console.WriteLine(isDestroying);
                 //Read log lines.
                 var lines = reader.GetFileContents();
 
