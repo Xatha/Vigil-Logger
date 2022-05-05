@@ -19,11 +19,19 @@ namespace ComponentHandlerLibrary
         //Constructors
         public ScintillaComponent()
         {
-            CreateScintilla(new Point(0, 0), new Size(1200, 1200), "", AnchorStyles.Top
+            CreateScintilla(new Point(0, 0), new Size(800, 1200), "", AnchorStyles.Top
                                                                        | AnchorStyles.Bottom
                                                                        | AnchorStyles.Left
                                                                        | AnchorStyles.Right);
             ApplyStyling();
+            // BASIC CONFIG
+            this.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ScrollWidth = 1;
+            this.ScrollWidthTracking = true;
+
+            // INITIAL VIEW CONFIG
+            this.WrapMode = WrapMode.None;
+            this.IndentationGuides = IndentView.LookBoth;
             ComponentCollections.ScintillaComponentCollection.Add(this);
             
         }
@@ -109,13 +117,14 @@ namespace ComponentHandlerLibrary
         protected void TruncateEvents()
         {
             this.TextChanged -= event_ScintillaComponent_TextChanged_AutoScroll;
-            //Auto scrolling
 
         }
 
         private void event_ScintillaComponent_TextChanged_AutoScroll(object sender, EventArgs e)
         {
+            //Auto scrolling
             this.LineScroll(this.Lines.Count, 0);
+            
         }
         #endregion
     }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ScintillaNET;
 
 namespace ComponentHandlerLibrary
 {
@@ -85,12 +86,12 @@ namespace ComponentHandlerLibrary
         private void event_onClickRemoveComponentAndParent(object sender, EventArgs e)
         {
             Console.WriteLine("Clicked!");
+
             new TabComponent(tabControl, new CloseTabButtonComponent(), new ScintillaLogWriterComponent()
             {
                 FilePath = @"C:\Users\Luca\Desktop\Test\test.txt"
             });
         }
-
         #endregion
     }
 

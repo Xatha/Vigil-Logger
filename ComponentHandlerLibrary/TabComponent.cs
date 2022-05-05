@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using ScintillaNET;
 using UtilityLibrary;
 
 namespace ComponentHandlerLibrary
@@ -62,9 +63,6 @@ namespace ComponentHandlerLibrary
             tabControl.Controls.Add(tabPage);
         }
 
-
-
-
         //Update the button locations and TabComponent names.
         public new virtual void Update()
         {
@@ -93,7 +91,7 @@ namespace ComponentHandlerLibrary
         {
             for (int i = 0; i < objects.Length; i++)
             {
-                if (objects[i] is ScintillaComponent || objects[i] is ScintillaLogWriterComponent)
+                if (objects[i] is ScintillaComponent || objects[i] is ScintillaLogWriterComponent || objects[i] is Scintilla)
                 {
                     Console.WriteLine($"Added object {objects[i]} to the list.");
 
@@ -154,8 +152,6 @@ namespace ComponentHandlerLibrary
             Update();
         }
 
-
-
         //Makes sure that when we hover our mouse over the current tab and its space, the close button shows up. 
         //And if the inverse is true, then hide the button again. 
         private void event_TabControl_MouseMove_HandleCloseTabButton(object sender, MouseEventArgs e)
@@ -186,6 +182,7 @@ namespace ComponentHandlerLibrary
                 {
                     closeTabButton.Hide();
                 }
+
             }
             catch
             {

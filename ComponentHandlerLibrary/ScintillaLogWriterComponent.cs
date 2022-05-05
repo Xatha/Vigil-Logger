@@ -26,15 +26,7 @@ namespace ComponentHandlerLibrary
         public new void Destroy()
         {
             isDestroying = true;
-            //reader.Destroy();
-            ////Remove TabComponent from list.
-            //ComponentCollections.ScintillaComponentCollection.Remove(this);
-
-            ////Remove events we created.
-            //TruncateEvents();
-
-            ////Dispose of TabComponent. 
-            //this.Dispose(true);
+            this.Dispose();
         }
 
 

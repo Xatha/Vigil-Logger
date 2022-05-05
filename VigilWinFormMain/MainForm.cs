@@ -9,7 +9,8 @@ using LexerStyleLibrary.Styles;
 using LogHandlerLibrary;
 using ScintillaNET;
 using ComponentHandlerLibrary.Utils;
-
+using UtilityLibrary;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace VigilWinFormMain
 {
@@ -28,8 +29,6 @@ namespace VigilWinFormMain
         {
             InitializeComponent();
             TextArea = new ScintillaNET.Scintilla();
-
-
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -40,13 +39,7 @@ namespace VigilWinFormMain
             // CREATE CONTROL
             TextPanel.Controls.Add(TextArea);
 
-            // BASIC CONFIG
-            TextArea.Dock = System.Windows.Forms.DockStyle.Fill;
-            TextArea.TextChanged += (this.OnTextChanged);
 
-            // INITIAL VIEW CONFIG
-            TextArea.WrapMode = WrapMode.None;
-            TextArea.IndentationGuides = IndentView.LookBoth;
 
             // STYLING
             InitColors();
@@ -74,11 +67,6 @@ namespace VigilWinFormMain
             });
 
 
-
-            //LogTabManager firstLog = new LogTabManager(TabControlOrig);
-            //firstLog.StartLogger(@"C:\Users\Luca\AppData\Roaming\r2modmanPlus-local\RiskOfRain2\profiles\Modding\BepInEx\LogOutput.log");
-            tabControl1.DrawItem += TabControl1_DrawItem;
-            //var openTabButton = new OpenTabButtonComponent(TabControlOrig, new Point(480, 64), new Size(50, 50));
             //Some logic to determine the placement of the button. This was painful to make.
             var thisTabCountIndex = ComponentCollections.TabComponentCollection.Count - 1;
             var movePosPerTab = 48 * (thisTabCountIndex + 1);
@@ -86,57 +74,21 @@ namespace VigilWinFormMain
 
             new OpenTabButtonComponent(TabControlOrig, tabPos, new Size(75, 25));
 
-        }
-
-        private void TabControl1_DrawItem(object sender, DrawItemEventArgs e)
-        {
-            TabPage CurrentTab = tabControl1.TabPages[e.Index];
-            Rectangle ItemRect = tabControl1.GetTabRect(e.Index);
-            SolidBrush FillBrush = new SolidBrush(Color.Red);
-            SolidBrush TextBrush = new SolidBrush(Color.White);
-            StringFormat sf = new StringFormat();
-            sf.Alignment = StringAlignment.Center;
-            sf.LineAlignment = StringAlignment.Center;
-
-            //If we are currently painting the Selected TabItem we'll
-            //change the brush colors and inflate the rectangle.
-            if (System.Convert.ToBoolean(e.State & DrawItemState.Selected))
+            tabControl1.MouseClick += (object s, MouseEventArgs clickEvent) =>
             {
-                FillBrush.Color = Color.Black;
-                TextBrush.Color = Color.Red;
-                ItemRect.Inflate(2, 2);
-            }
-
-            //Set up rotation for left and right aligned tabs
-            if (tabControl1.Alignment == TabAlignment.Left || tabControl1.Alignment == TabAlignment.Right)
-            {
-                float RotateAngle = 90;
-                if (tabControl1.Alignment == TabAlignment.Left)
-                    RotateAngle = 270;
-                PointF cp = new PointF(ItemRect.Left + (ItemRect.Width / 2), ItemRect.Top + (ItemRect.Height / 2));
-                e.Graphics.TranslateTransform(cp.X, cp.Y);
-                e.Graphics.RotateTransform(RotateAngle);
-                ItemRect = new Rectangle(-(ItemRect.Height / 2), -(ItemRect.Width / 2), ItemRect.Height, ItemRect.Width);
-            }
-
-            //Next we'll paint the TabItem with our Fill Brush
-            e.Graphics.FillRectangle(FillBrush, ItemRect);
-
-            //Now draw the text.
-            e.Graphics.DrawString(CurrentTab.Text, e.Font, TextBrush, (RectangleF)ItemRect, sf);
-
-            //Reset any Graphics rotation
-            e.Graphics.ResetTransform();
-
-            //Finally, we should Dispose of our brushes.
-            FillBrush.Dispose();
-            TextBrush.Dispose();
+                if (clickEvent.Button == MouseButtons.Middle)
+                {
+                    var x = tabControl1.FindControlFromLocation<TabComponent>(clickEvent.Location);
+                    if (x == ComponentCollections.TabComponentCollection[0])
+                    {
+                        return;
+                    }
+                    ComponentDestructionHandler.DestroyParentAndChildren(x);
+                    Console.WriteLine($"{clickEvent.Button} was pressed while hovering over {x}!");
+                }
+            };
         }
 
-        private void CreateTabControls()
-        {
-
-        }
         private void InitColors()
         {
             TextArea.SetSelectionBackColor(true, Util.IntToColor(0x114D9C));
@@ -144,7 +96,6 @@ namespace VigilWinFormMain
 
         private void InitHotkeys()
         {
-
             // register the hotkeys with the form
             HotKeyManager.AddHotKey(this, OpenSearch, Keys.F, true);
             HotKeyManager.AddHotKey(this, OpenFindDialog, Keys.F, true, false, true);
@@ -209,7 +160,6 @@ namespace VigilWinFormMain
             TextArea.Styles[LoggingStyle.StyleError].ForeColor = Color.Red;
             TextArea.Styles[LoggingStyle.StyleTime].ForeColor = Color.Green;
             TextArea.Lexer = Lexer.Container;
-
 
             //TextArea.SetKeywords(0, "class extends implements import interface new case do while else if for in switch throw get set function var try catch finally while with default break continue delete return each const namespace package include use is as instanceof typeof author copy default deprecated eventType example exampleText exception haxe inheritDoc internal link mtasc mxmlc param private return see serial serialData serialField since throws usage version langversion playerversion productversion dynamic private public partial static intrinsic internal native override protected AS3 final super this arguments null Infinity NaN undefined true false abstract as base bool break by byte case catch char checked class const continue decimal default delegate do double descending explicit event extern else enum false finally fixed float for foreach from goto group if implicit in int interface internal into is lock long new null namespace object operator out override orderby params private protected public readonly ref return switch struct sbyte sealed short sizeof stackalloc static string select this throw true try typeof uint ulong unchecked unsafe ushort using var virtual volatile void while where yield");
             //TextArea.SetKeywords(1, "void Null ArgumentError arguments Array Boolean Class Date DefinitionError Error EvalError Function int Math Namespace Number Object RangeError ReferenceError RegExp SecurityError String SyntaxError TypeError uint XML XMLList Boolean Byte Char DateTime Decimal Double Int16 Int32 Int64 IntPtr SByte Single UInt16 UInt32 UInt64 UIntPtr Void Path File System Windows Forms ScintillaNET");
@@ -732,10 +682,15 @@ namespace VigilWinFormMain
         {
             var movePosPerTab = 48 * (ComponentCollections.TabComponentCollection.Count + 1);
             var tabPos = Point.Add(new Point((10 + movePosPerTab - 20), 91), new Size(0, 0));
-            var tab = new TabComponent(TabControlOrig, new ScintillaLogWriterComponent()
-            {
-                FilePath = @"C:\Users\Luca\Desktop\Test\test.txt"
-            }, new CloseTabButtonComponent(tabPos, new Size(20, 25)));
+
+            new TabComponent(TabControlOrig, new Scintilla(), new CloseTabButtonComponent(tabPos, new Size(20, 25)));
+
+            //new TabComponent(TabControlOrig, new ScintillaLogWriterComponent()
+            //{
+            //    FilePath = @"C:\Users\Luca\Desktop\Test\test.txt"
+            //}, new CloseTabButtonComponent(tabPos, new Size(20, 25)));
+
+
             //var tabComponent = new TabComponent(TabControlOrig);
             //tabComponent.Controls.Add(new ScintillaComponent());
             //var s = new ScintillaComponent();
