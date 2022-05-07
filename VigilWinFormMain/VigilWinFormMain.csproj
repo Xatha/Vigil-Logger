@@ -20,7 +20,6 @@
     <ProjectReference Include="..\ComponentHandlerLibrary\ComponentHandlerLibrary.csproj" />
     <ProjectReference Include="..\LexerStyleLibrary\LexerStyleLibrary.csproj" />
     <ProjectReference Include="..\LogHandlerLibrary\LogHandlerLibrary.csproj" />
-    <ProjectReference Include="..\ScintillaNET.Demo\ScintillaNET.Demo.csproj" />
   </ItemGroup>
 
   <ItemGroup>

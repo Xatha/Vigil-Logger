@@ -90,17 +90,19 @@
             // FileName
             // 
             this.FileName.AutoSize = true;
+            this.FileName.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.FileName.Font = new System.Drawing.Font("Segoe UI Light", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FileName.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.FileName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.FileName.Location = new System.Drawing.Point(12, 42);
             this.FileName.Name = "FileName";
-            this.FileName.Size = new System.Drawing.Size(52, 30);
+            this.FileName.Size = new System.Drawing.Size(123, 30);
             this.FileName.TabIndex = 1;
-            this.FileName.Text = "Title";
+            this.FileName.Text = "Vigil Logger";
+            this.FileName.Click += new System.EventHandler(this.FileName_Click);
             // 
             // menuStrip1
             // 
-            this.menuStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.menuStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.menuStrip1.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
@@ -118,6 +120,7 @@
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openToolStripMenuItem});
+            this.fileToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(41, 23);
             this.fileToolStripMenuItem.Text = "File";
@@ -145,6 +148,7 @@
             this.toolStripSeparator3,
             this.uppercaseSelectionToolStripMenuItem,
             this.lowercaseSelectionToolStripMenuItem});
+            this.editToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(44, 23);
             this.editToolStripMenuItem.Text = "Edit";
@@ -250,6 +254,7 @@
             this.findAndReplaceToolStripMenuItem,
             this.toolStripSeparator7,
             this.goToLineToolStripMenuItem});
+            this.searchToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
             this.searchToolStripMenuItem.Size = new System.Drawing.Size(61, 23);
             this.searchToolStripMenuItem.Text = "Search";
@@ -303,6 +308,7 @@
             this.toolStripSeparator5,
             this.collapseAllToolStripMenuItem,
             this.expandAllToolStripMenuItem});
+            this.viewToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(50, 23);
             this.viewToolStripMenuItem.Text = "View";
@@ -380,6 +386,7 @@
             // 
             // settingsToolStripMenuItem
             // 
+            this.settingsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(70, 23);
             this.settingsToolStripMenuItem.Text = "Settings";
@@ -479,7 +486,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(769, 628);
             this.Controls.Add(this.tabControl1);
@@ -491,7 +498,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MinimumSize = new System.Drawing.Size(250, 250);
             this.Name = "MainForm";
-            this.Text = "Xatha Logger";
+            this.Text = "Vigil Logger";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

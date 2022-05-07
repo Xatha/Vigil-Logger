@@ -655,6 +655,10 @@ namespace VigilWinFormMain
         {
         
         }
-        
+
+        private void FileName_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

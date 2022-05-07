@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ComponentHandlerLibrary.ScintillaAttachmentHelper;
+using ComponentHandlerLibrary.Utils;
 using ScintillaNET;
 
 namespace ComponentHandlerLibrary
@@ -34,8 +35,7 @@ namespace ComponentHandlerLibrary
             var button = this;
 
             button.BackColor = System.Drawing.Color.Black;
-            button.ForeColor = System.Drawing.Color.Firebrick;
-
+            button.ForeColor = System.Drawing.Color.Black;
             button.Name = $"button{ComponentCollections.CloseTabButtonComponentCollection.Count}";
             button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
             button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
