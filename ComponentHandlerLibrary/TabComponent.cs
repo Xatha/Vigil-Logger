@@ -9,47 +9,55 @@ namespace ComponentHandlerLibrary
 {
     public class TabComponent : TabPage
     {
+        public bool IsSelected { get; private set; } = false;
+        public List<object> childrenObjectsComponents = new List<object>();
+
         private TabControl tabControl;
-        internal List<object> childrenObjectsComponents = new List<object>();
+
 
         public TabComponent(TabControl tabControl)
         {
-            //Determines which control our TabComponent gets attached to.
-            this.tabControl = tabControl;
-
-            //Order matters; firstly our TabComponent is created and added to the control, then our close tab button is added, and lastly our events. 
-            this.CreateTab();
-            //this.CreateCloseTabButton();
-            this.AppendEvents();
-
-            //Add our TabComponent to the collection. 
-            ComponentCollections.TabComponentCollection.Add(this);
+            Initialize(tabControl);
         }
 
         public TabComponent(TabControl tabControl, params object[] childComponents)
         {
-            //Determines which control our TabComponent gets attached to.
-            this.tabControl = tabControl;
-
-            //Order matters; firstly our TabComponent is created and added to the control, then our close tab button is added, and lastly our events. 
-            this.CreateTab();
-            //this.CreateCloseTabButton();
-            this.AppendEvents();
-
-            //Add our TabComponent to the collection. 
-            ComponentCollections.TabComponentCollection.Add(this);
+            Initialize(tabControl);
 
             //Add child components the object.
             Add(childComponents);
         }
+
         ~TabComponent()
         {
             Console.WriteLine($"Object {this.ToString()}: finalizer is executing.");
         }
 
+        private void Initialize(TabControl tabControl)
+        {
+            //Determines which control our TabComponent gets attached to.
+            this.tabControl = tabControl;
+
+            //Order matters; firstly our TabComponent is created and added to the control, then our close tab button is added, and lastly our events. 
+            this.CreateTab();
+
+            //this.CreateCloseTabButton();
+            this.AppendEvents();
+
+            //Add our TabComponent to the collection. 
+            ComponentCollections.TabComponentCollection.Add(this);
+
+            //Makes sure the first tab created on startup is considered selected.
+            if (ComponentCollections.TabComponentCollection.Count <= 1)
+            {
+                IsSelected = true;
+            }
+        }
+
         //Create and add the Tab to the TabControl
         private void CreateTab()
         {
+
             //Create Tab Object
             var tabPage = this;
             var tabCount = ComponentCollections.TabComponentCollection.Count;
@@ -101,7 +109,7 @@ namespace ComponentHandlerLibrary
                 else if (objects[i] is CloseTabButtonComponent)
                 {
                     var closeTabButtonComponent = (CloseTabButtonComponent)objects[i];
-                    closeTabButtonComponent.tabComponent = this;
+                    closeTabButtonComponent.parentTabComponent = this;
 
                     Console.WriteLine($"Added object {objects[i]} to the list.");
                     childrenObjectsComponents.Add(objects[i]);
@@ -136,8 +144,23 @@ namespace ComponentHandlerLibrary
         //Appends our listener functions to the events. 
         private void AppendEvents()
         {
+            tabControl.Selected += event_TabControl_Selecte_CheckIfSelectedTabIsThis;
             tabControl.MouseMove += event_TabControl_MouseMove_HandleCloseTabButton;
             tabControl.ControlRemoved += event_TabControl_ControlRemoved_UpdateTabs;
+        }
+
+        private void event_TabControl_Selecte_CheckIfSelectedTabIsThis(object sender, TabControlEventArgs e)
+        {
+            if (tabControl.SelectedTab == this)
+            {
+                IsSelected = true;
+                Console.WriteLine($"Selected tab is {this}");
+            }
+            else
+            {
+                IsSelected = false;
+                Console.WriteLine($"{IsSelected}");
+            }
         }
 
         //Removes our listeners function. 
@@ -182,7 +205,6 @@ namespace ComponentHandlerLibrary
                 {
                     closeTabButton.Hide();
                 }
-
             }
             catch
             {

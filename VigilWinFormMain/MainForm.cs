@@ -25,10 +25,27 @@ namespace VigilWinFormMain
         {
             InitializeComponent();
             TextArea = new ScintillaNET.Scintilla();
+            
+
+            // new ClearScintillaButtonComponent();
+
+            //var mybutton = new System.Windows.Forms.Button();
+            //mybutton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            //mybutton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            //mybutton.Location = new System.Drawing.Point(677, 65);
+            //mybutton.Name = "button1";
+            //mybutton.Size = new System.Drawing.Size(75, 50);
+            //mybutton.TabIndex = 12;
+            //mybutton.Text = "button1";
+            //mybutton.UseVisualStyleBackColor = true;
+            //this.Controls.Add(mybutton);
         }
 
         private void MainForm_Load(object sender, EventArgs e)
-        { 
+        {
+            this.WindowState = FormWindowState.Normal;
+            new ClearScintillaButtonComponent();
+
             // Assing Properties
             TabControlMain = tabControl1;
 
@@ -41,7 +58,6 @@ namespace VigilWinFormMain
             });
 
             new OpenTabButtonComponent(TabControlMain, OpenTabButtonUtil.OpenTabButtonPosition(), new Size(75, 25));
-
             // STYLING
             InitColors();
             InitSyntaxColoring();
@@ -59,6 +75,7 @@ namespace VigilWinFormMain
 
             // INIT HOTKEYS
             InitHotkeys();
+
         }
 
         private void InitColors()

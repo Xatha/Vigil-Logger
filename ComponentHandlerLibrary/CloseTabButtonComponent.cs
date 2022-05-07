@@ -8,12 +8,12 @@ namespace ComponentHandlerLibrary
 {
     public class CloseTabButtonComponent : Button
     {
-        internal TabComponent tabComponent { get; set; }
+        internal TabComponent parentTabComponent { get; set; }
         
         //Constructor
         public CloseTabButtonComponent(System.Drawing.Point location, System.Drawing.Size size, TabComponent tabComponent)
         {
-            this.tabComponent = tabComponent;
+            this.parentTabComponent = tabComponent;
 
             ComponentCollections.CloseTabButtonComponentCollection.Add(this);
 
@@ -24,7 +24,7 @@ namespace ComponentHandlerLibrary
         }
         public CloseTabButtonComponent(System.Drawing.Point location, System.Drawing.Size size)
         {
-            this.tabComponent = tabComponent;
+            this.parentTabComponent = parentTabComponent;
 
             ComponentCollections.CloseTabButtonComponentCollection.Add(this);
 
@@ -38,7 +38,7 @@ namespace ComponentHandlerLibrary
             var movePosPerTab = 48 * (ComponentCollections.TabComponentCollection.Count + 1);
             var tabPos = Point.Add(new Point((10 + movePosPerTab - 20), 91), new Size(0, 0));
 
-            this.tabComponent = tabComponent;
+            this.parentTabComponent = parentTabComponent;
 
             ComponentCollections.CloseTabButtonComponentCollection.Add(this);
 
@@ -63,7 +63,7 @@ namespace ComponentHandlerLibrary
             button.ForeColor = System.Drawing.Color.Firebrick;
 
             button.Name = $"button{ComponentCollections.CloseTabButtonComponentCollection.Count}";
-            button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
+            button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             button.Location = location;
             button.Size = size;
@@ -116,7 +116,7 @@ namespace ComponentHandlerLibrary
         //Destroy parent and all its atteched objects..
         private void event_onClickRemoveComponentAndParent(object sender, EventArgs e)
         {
-            ComponentDestructionHandler.DestroyParentAndChildren(tabComponent);
+            ComponentDestructionHandler.DestroyParentAndChildren(parentTabComponent);
         }
 
         #endregion

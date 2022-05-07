@@ -8,7 +8,7 @@ namespace ComponentHandlerLibrary
 {
     public static class ComponentDestructionHandler
     {
-        private static Action<object> DESTRUCTION_MSG = (attachedObject) =>
+        private static readonly Action<object> DESTRUCTION_MSG = (attachedObject) =>
         {
             Console.WriteLine($"{attachedObject} has been flagged for destruction.");
         };

@@ -38,7 +38,6 @@ namespace VigilWinFormMain
             {
                 //Get the tabComponent that is clicked on.
                 var tabComponent = tabControl.FindControlFromLocation<TabComponent>(e.Location);
-
                 //If the component is the first one, then return. 
                 if (tabComponent == ComponentCollections.TabComponentCollection[0])
                 {
