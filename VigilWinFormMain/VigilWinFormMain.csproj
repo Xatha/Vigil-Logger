@@ -23,4 +23,8 @@
     <ProjectReference Include="..\ScintillaNET.Demo\ScintillaNET.Demo.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Components\ClearScintillaButtonComponent.cs" />
+  </ItemGroup>
+
 </Project>

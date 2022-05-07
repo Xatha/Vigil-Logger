@@ -24,10 +24,10 @@ namespace VigilWinFormMain
             tabControl.MouseClick += event_TabControl_MouseClick_MiddleClickDestroyTab;
 
             //Makes it so the selected tab does not deselect when a tab is removed.
-            tabControl.ControlRemoved += even_TabControl_ControlRemoved_TabSelector;
+            tabControl.ControlRemoved += event_TabControl_ControlRemoved_TabSelector;
         }
 
-        private void even_TabControl_ControlRemoved_TabSelector(object sender, ControlEventArgs e)
+        private void event_TabControl_ControlRemoved_TabSelector(object sender, ControlEventArgs e)
         {
             tabControl.SelectTab(tabControl.SelectedTab);
         }

@@ -9,9 +9,14 @@ namespace ComponentHandlerLibrary
 
         public ButtonComponentBase(Color backColor, Color ForeColor, Point location, Size size, string name, string buttonText, AnchorStyles anchor)
         {
-            CreateButton(backColor, ForeColor, location, size, name, buttonText, anchor);
-            SetEvents();
+            Initialize(backColor, ForeColor, location, size, name, buttonText, anchor);
         }
+        protected virtual void Initialize(Color backColor, Color ForeColor, Point location, Size size, string name, string buttonText, AnchorStyles anchor)
+        {
+            CreateButton(backColor, ForeColor, location, size, name, buttonText, anchor);
+            Application.OpenForms[0].Controls.Add(this);
+        }
+
         protected virtual void CreateButton(Color backColor, Color ForeColor, Point location, Size size, string name, string buttonText, AnchorStyles anchor)
         {
             var button = this;
@@ -28,7 +33,6 @@ namespace ComponentHandlerLibrary
 
             button.Name = name;
             button.Text = buttonText;
-            Application.OpenForms[0].Controls.Add(button);
         }
         protected virtual void UpdateButton() { }
         protected abstract void SetEvents();

@@ -12,6 +12,8 @@ using UtilityLibrary;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using ComponentHandlerLibrary.Utils;
 using ComponentHandlerLibrary.Utils.Button;
+using VigilWinFormMain.Components;
+using ComponentHandlerLibrary.ScintillaAttachmentHelper;
 
 namespace VigilWinFormMain
 {
@@ -44,20 +46,18 @@ namespace VigilWinFormMain
         private void MainForm_Load(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Normal;
-            new ClearScintillaButtonComponent();
-
-            // Assing Properties
+            // Addiing Properties
             TabControlMain = tabControl1;
 
             // Initialise first-time objects and helpers.
             new TabControlHelper(TabControlMain);
 
-            new TabComponent(TabControlMain, new ScintillaLogWriterComponent
-            {
-                FilePath = @"C:\Users\Luca\Desktop\testfile.txt"
-            });
+            new TabComponent(TabControlMain, new  ScintillaAttachmentBinder(new ScintillaComponent(), new ScintillaLogWriterSubComponent(null), new TestSubComponent()));
 
+            new ClearScintillaButtonComponent();
+            new StopLogWriterButtonComponent(TabControlMain);
             new OpenTabButtonComponent(TabControlMain, OpenTabButtonUtil.OpenTabButtonPosition(), new Size(75, 25));
+            new LogWriterTextBoxFilePath();
             // STYLING
             InitColors();
             InitSyntaxColoring();
@@ -650,5 +650,11 @@ namespace VigilWinFormMain
                 action.Invoke();
             }
         }
+
+        private void metroTextBox1_Click(object sender, EventArgs e)
+        {
+        
+        }
+        
     }
 }

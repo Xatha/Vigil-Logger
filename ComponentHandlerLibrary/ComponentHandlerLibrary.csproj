@@ -6,14 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Component.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Component.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="jacobslusser.ScintillaNET" Version="3.6.3" />
   </ItemGroup>
 

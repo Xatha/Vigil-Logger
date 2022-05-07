@@ -1,57 +1,63 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using ComponentHandlerLibrary.ScintillaAttachmentHelper;
 using LogHandlerLibrary;
+using ScintillaNET;
 using UtilityLibrary.ScintillaUtils;
 
 namespace ComponentHandlerLibrary
 {
-    public class ScintillaLogWriterComponent : ScintillaComponent
+    public class ScintillaLogWriterSubComponent : ScintillaSubComponentBase
     {
-        private readonly LogReaderHandler reader;
-
         //Functions as a bool, but for async functions. 
         public CancellationTokenSource WritingToken { get; set; } = new CancellationTokenSource();
+        public override Scintilla ScintillaParent { get; set; }
         public string FilePath { get; set; } = null;
 
-        public ScintillaLogWriterComponent()
+        private bool isDisposing = false;
+        private readonly LogReaderHandler reader;
+
+        public ScintillaLogWriterSubComponent(string FilePath)
         {
-
             this.reader = new LogReaderHandler(FilePath);
-
-            //For some reason the events arent appended to this component.
-            AppendEvents();
 
             //Being writing to console.
             BeginWriting();
         }
-
-        public new void Destroy()
+       
+        ~ScintillaLogWriterSubComponent()
         {
+            Console.WriteLine($"Object: {this} deconstructor has been called.");
+        }
+
+        public override void Destroy()
+        {
+            //Destroy Attached Objects.
+            reader.Destroy();
+            ScintillaParent = null;
+
             //Stops the writer.
             StopWriting();
+
+            isDisposing = true;
             this.Dispose();
         }
 
         public void StopWriting()
         {
-            WritingToken.Cancel();
-        }   
-
-        //Update Writer
-        public void UpdateFilePath(string filePath)
-        {
-            if(!reader.SetFilePath(filePath))
+            if (!isDisposing)
             {
-                Console.WriteLine("Could not sucessfully set file path.");
-                return;
-            };
-
-            StopWriting();
-            WritingToken = new CancellationTokenSource();
-
-            BeginWriting();
+                try
+                {
+                    WritingToken.Cancel();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("EXPECTED CATCH: ");
+                    Console.WriteLine($"{ex.Message} \n {ex.StackTrace}");
+                }
+            }
         }
 
         //Outputs lines read from text into Scintilla.
@@ -66,6 +72,7 @@ namespace ComponentHandlerLibrary
                 //If loglines is null, read from log again.
                 if (lines == null)
                 {
+                    await Task.Delay(10);
                     goto START;
                 }
 
@@ -79,20 +86,28 @@ namespace ComponentHandlerLibrary
                 await Task.Delay(100);
             }
 
-            //When cancelled dispose of the token.
             WritingToken.Dispose();
         }
 
         //Formats the string and pushes it to the Scintilla.
         private void AppendToScintilla(string logLine)
         {
+            //Weird fix, but because of the asynchronous function BeginWriting() it runs before the AttachmentBinder is finished building the components.
+            //This means that this function will fire before we get a reference to ScintillaParent.
+            if (ScintillaParent == null)
+            {
+                return;
+            }
+
             //Get time, formats it and prints it to log. 
             var currentTime = DateTime.Now.ToString("hh:mm:ss") + ":" + DateTime.Now.Millisecond.ToString().PadRight(3, '0');
             var formattedTime = String.Format("[{0}] ", currentTime);
 
             //Appends text to console.
-            this.AppendText(true, formattedTime + logLine);
+            ScintillaParent.AppendText(true, formattedTime + logLine);
         }
 
     }
 }
+
+

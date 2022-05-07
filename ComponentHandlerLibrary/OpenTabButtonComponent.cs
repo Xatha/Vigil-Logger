@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ComponentHandlerLibrary.ScintillaAttachmentHelper;
 using ScintillaNET;
 
 namespace ComponentHandlerLibrary
@@ -87,10 +88,8 @@ namespace ComponentHandlerLibrary
         {
             Console.WriteLine("Clicked!");
 
-            new TabComponent(tabControl, new CloseTabButtonComponent(), new ScintillaLogWriterComponent()
-            {
-                FilePath = @"C:\Users\Luca\Desktop\Test\test.txt"
-            });
+            new TabComponent(tabControl, new CloseTabButtonComponent(), new ScintillaAttachmentBinder(new ScintillaComponent(),
+                                                                                                       new ScintillaLogWriterSubComponent(null)));
         }
         #endregion
     }

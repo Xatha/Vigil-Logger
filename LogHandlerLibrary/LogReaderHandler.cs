@@ -2,37 +2,39 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Management.Automation;
+using System.Windows.Forms;
+using static ScintillaNET.Style;
+using PowerShell = System.Management.Automation.PowerShell;
 
 namespace LogHandlerLibrary
 {
     public class LogReaderHandler
     {
         private readonly PowerShell psInstance = PowerShell.Create();
-        private readonly string filePath;
         private int skipLines = 0;
+        private string filePath;
+        private bool isDestroying = false;
 
         public LogReaderHandler(string FilePath = null)
         {
-            //The same as "Get-Content " + configFilePath + " | Select -Skip " + skipLines.
-            //psInstance.AddCommand("Get-Content")
-            //          .AddArgument(FilePath)
-            //          .AddCommand("Select")
-            //          .AddParameter("Skip", skipLines);
-            //psInstance.AddScript("Get-Content " + configFilePath + " | Select -Skip " + skipLines);
+            //Trim FilePath in case it had quotation marks included
+            var trimmedFilePath = FilePath != null ? FilePath.Trim('"') : null;
 
             //If no config file path is given, set to a default path.
-            if (FilePath != null)
+            if (IsFilePathValid(trimmedFilePath))
             {
-                this.filePath = System.IO.Path.GetFullPath(Path.Combine(FilePath));
+                this.filePath = System.IO.Path.GetFullPath(Path.Combine(trimmedFilePath));
             }
             else
             {
-                this.filePath = System.IO.Path.GetFullPath(Path.Combine(@"C:\Users\Luca\AppData\Roaming\r2modmanPlus-local\RiskOfRain2\profiles\Modding\BepInEx\LogOutput.log"));
+                MessageBox.Show($"File Path could not be resolved. Please check your input");
+                Destroy();
             }
         }
 
         public void Destroy()
         {
+            isDestroying = true;
             psInstance.Stop();
             psInstance.Dispose();
         }
@@ -41,6 +43,10 @@ namespace LogHandlerLibrary
         //Better optimised, should look at it again.
         public List<string> GetFileContents()
         {
+            if (isDestroying)
+            {
+                return null;
+            }
             //Clears the commands
             psInstance.Commands.Clear();
             //Add the commands again, with a skiplines parameter to make sure we dont read the whole file again.
@@ -76,6 +82,31 @@ namespace LogHandlerLibrary
             return lines;
         }
 
+        public bool SetFilePath(string filePath)
+        {
+            if (IsFilePathValid(@filePath))
+            {
+                this.filePath = filePath;
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("test");
+                return false;  
+            }
+        }
+
+        private bool IsFilePathValid(string filePath)
+        {
+            if (filePath == null || filePath == "" || !File.Exists(filePath))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+
         //Checks if the file is in use.
         private static bool IsFileInUse(string sFile)
         {
@@ -90,14 +121,16 @@ namespace LogHandlerLibrary
                     fs.Close();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //If not, return true; the file is in use/locked.                
+                Console.WriteLine("EXPECTED CATCH: ");
+                Console.WriteLine($"{ex.Message} \n {ex.StackTrace}");
                 return true;
             }
             //Otherwise return false.
             return false;
         }
+
     }
 
 }

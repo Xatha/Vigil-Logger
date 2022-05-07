@@ -492,7 +492,6 @@
             this.MinimumSize = new System.Drawing.Size(250, 250);
             this.Name = "MainForm";
             this.Text = "Xatha Logger";
-            //this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -551,8 +550,6 @@
         private System.Windows.Forms.TabPage tabLog1;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.TabControl tabControl1;
-
-        
     }
 }
 

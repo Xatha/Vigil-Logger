@@ -33,7 +33,8 @@ namespace ComponentHandlerLibrary
             this.WrapMode = WrapMode.None;
             this.IndentationGuides = IndentView.LookBoth;
             ComponentCollections.ScintillaComponentCollection.Add(this);
-            
+
+            AppendEvents();
         }
         public ScintillaComponent(Point location, Size size, string text, AnchorStyles anchor)
         {
@@ -126,6 +127,7 @@ namespace ComponentHandlerLibrary
             this.LineScroll(this.Lines.Count, 0);
             
         }
+
         #endregion
     }
 }

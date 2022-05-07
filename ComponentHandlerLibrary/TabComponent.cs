@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using ComponentHandlerLibrary.ScintillaAttachmentHelper;
 using ScintillaNET;
 using UtilityLibrary;
 
@@ -10,10 +11,9 @@ namespace ComponentHandlerLibrary
     public class TabComponent : TabPage
     {
         public bool IsSelected { get; private set; } = false;
-        public List<object> childrenObjectsComponents = new List<object>();
+        public List<object> ChildrenObjectsComponents = new List<object>();
 
         private TabControl tabControl;
-
 
         public TabComponent(TabControl tabControl)
         {
@@ -57,7 +57,6 @@ namespace ComponentHandlerLibrary
         //Create and add the Tab to the TabControl
         private void CreateTab()
         {
-
             //Create Tab Object
             var tabPage = this;
             var tabCount = ComponentCollections.TabComponentCollection.Count;
@@ -86,12 +85,13 @@ namespace ComponentHandlerLibrary
             try
             {
                 //Calls closeTabButtonComponent update - which updates its location.
-                var closeTabButton = childrenObjectsComponents.FindFirstOfType<CloseTabButtonComponent>();
+                var closeTabButton = ChildrenObjectsComponents.FindFirstOfType<CloseTabButtonComponent>();
                 closeTabButton.Update();
             }
-            catch
+            catch (Exception ex)
             {
-                //Do nothing. Catching here is expected.
+                Console.WriteLine("EXPECTED CATCH: ");
+                Console.WriteLine($"{ex.Message} \n {ex.StackTrace}");
             }
         }
 
@@ -104,7 +104,7 @@ namespace ComponentHandlerLibrary
                     Console.WriteLine($"Added object {objects[i]} to the list.");
 
                     this.Controls.Add((Control)objects[i]);
-                    childrenObjectsComponents.Add(objects[i]);
+                    ChildrenObjectsComponents.Add(objects[i]);
                 }
                 else if (objects[i] is CloseTabButtonComponent)
                 {
@@ -112,12 +112,37 @@ namespace ComponentHandlerLibrary
                     closeTabButtonComponent.parentTabComponent = this;
 
                     Console.WriteLine($"Added object {objects[i]} to the list.");
-                    childrenObjectsComponents.Add(objects[i]);
+                    ChildrenObjectsComponents.Add(objects[i]);
+                }
+                else if (objects[i] is ScintillaAttachmentBinder)
+                {
+                    var scintillaAttachmentBinder = objects[i] as ScintillaAttachmentBinder;
+
+                    Console.WriteLine($"Added object {scintillaAttachmentBinder} to the list.");
+
+                    ChildrenObjectsComponents.Add(scintillaAttachmentBinder.ScintillaComponent);
+                    AddSubComponents(scintillaAttachmentBinder, scintillaAttachmentBinder.SubComponents);
+
+                    this.Controls.Add((Control)scintillaAttachmentBinder.ScintillaComponent);
+                    
+                }
+                else if (objects[i] is ScintillaSubComponentBase) 
+                {
+                    Console.WriteLine($"Adding SubComponent: {objects[i]} TO {this}");
+                    ChildrenObjectsComponents.Add(objects[i]);
                 }
                 else
                 {
-                    Console.WriteLine($"ERROR ADDING {objects[i]} TO {this}");
+                    Console.WriteLine($"ERROR: COULD NOT ADD UNKNOWN OBJECT: {objects[i]} TO {this}");
                 }
+            }
+        }
+
+        private void AddSubComponents(ScintillaAttachmentBinder attachmentBinder, List<ScintillaSubComponentBase> subComponents)
+        {
+            foreach (var subComponent in subComponents)
+            {
+                ChildrenObjectsComponents.Add(subComponent);
             }
         }
 
@@ -125,7 +150,7 @@ namespace ComponentHandlerLibrary
         public void Destroy()
         {
             //Removes all references from the list.
-            childrenObjectsComponents = null;
+            ChildrenObjectsComponents = null;
 
             //Remove TabComponent from list.
             ComponentCollections.TabComponentCollection.Remove(this);
@@ -179,7 +204,7 @@ namespace ComponentHandlerLibrary
         //And if the inverse is true, then hide the button again. 
         private void event_TabControl_MouseMove_HandleCloseTabButton(object sender, MouseEventArgs e)
         {
-            var closeTabButton = childrenObjectsComponents.FindFirstOfType<CloseTabButtonComponent>();
+            var closeTabButton = ChildrenObjectsComponents.FindFirstOfType<CloseTabButtonComponent>();
 
             var thisTabCountIndex = ComponentCollections.TabComponentCollection.IndexOf(this);
 

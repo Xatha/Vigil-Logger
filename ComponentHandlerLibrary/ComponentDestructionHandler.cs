@@ -3,22 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ComponentHandlerLibrary.ScintillaAttachmentHelper;
 
 namespace ComponentHandlerLibrary
 {
     public static class ComponentDestructionHandler
     {
-        private static readonly Action<object> DESTRUCTION_MSG = (attachedObject) =>
+        public static void DestroySubComponentofType<T>(TabComponent parentComponent) where T : ScintillaSubComponentBase
         {
-            Console.WriteLine($"{attachedObject} has been flagged for destruction.");
-        };
+            foreach (var attachedObject in parentComponent.ChildrenObjectsComponents.ToList())
+            {
+                var childSubComponent = attachedObject as T;
+
+                if (childSubComponent != null)
+                {
+                    DESTRUCTION_MSG(attachedObject);
+
+                    parentComponent.ChildrenObjectsComponents.Remove(childSubComponent);
+
+                    childSubComponent.Destroy();
+                }
+            }
+        }
 
         public static void DestroyParentAndChildren(TabComponent parentComponent)
         {
             //If it exists, destroy the child objects first. The order matters, since they can depend on each other.
-            foreach (var attachedObject in parentComponent.childrenObjectsComponents)
+            foreach (var attachedObject in parentComponent.ChildrenObjectsComponents)
             {
-                var childScintillaLogWriterComp = attachedObject as ScintillaLogWriterComponent;
+                var childScintillaLogWriterComp = attachedObject as ScintillaSubComponentBase;
                 var childScintillaComp = attachedObject as ScintillaComponent;
                 var childCloseTabComp = attachedObject as CloseTabButtonComponent;
 
@@ -40,10 +53,17 @@ namespace ComponentHandlerLibrary
                     childCloseTabComp.Destroy();
                 }
             }
-            
+
             //And lastly destroy the parent component.
             DESTRUCTION_MSG(parentComponent);
             parentComponent.Destroy();
         }
+
+        private static readonly Action<object> DESTRUCTION_MSG = (attachedObject) =>
+        {
+            Console.WriteLine($"{attachedObject} has been flagged for destruction.");
+        };
+
     }
+
 }
