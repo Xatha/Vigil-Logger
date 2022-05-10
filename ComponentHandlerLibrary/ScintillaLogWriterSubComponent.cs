@@ -13,7 +13,6 @@ namespace ComponentHandlerLibrary
         //Functions as a bool, but for async functions. 
         public CancellationTokenSource WritingToken { get; set; } = new CancellationTokenSource();
         public override Scintilla ScintillaParent { get; set; }
-        public string FilePath { get; set; } = null;
 
         private bool isDisposing = false;
         private readonly LogReaderHandler reader;
@@ -25,7 +24,7 @@ namespace ComponentHandlerLibrary
             //Being writing to console.
             BeginWriting();
         }
-       
+
         ~ScintillaLogWriterSubComponent()
         {
             Console.WriteLine($"Object: {this} deconstructor has been called.");
@@ -34,27 +33,28 @@ namespace ComponentHandlerLibrary
         public override void Destroy()
         {
             //Destroy Attached Objects.
-            reader.Destroy();
-            ScintillaParent = null;
+            this.reader.Destroy();
+            this.ScintillaParent = null;
 
             //Stops the writer.
             StopWriting();
 
-            isDisposing = true;
-            this.Dispose();
+            this.isDisposing = true;
+            Dispose();
         }
 
         public void StopWriting()
         {
-            if (!isDisposing)
+            //This is really bad and I think it can cause memory leaks.
+            if (!this.isDisposing)
             {
                 try
                 {
-                    WritingToken.Cancel();
+                    this.WritingToken.Cancel();
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("EXPECTED CATCH: ");
+                    Console.WriteLine("EXPECTED CATCH | POSSIBILITY OF MEMORY LEAK |: ");
                     Console.WriteLine($"{ex.Message} \n {ex.StackTrace}");
                 }
             }
@@ -64,10 +64,10 @@ namespace ComponentHandlerLibrary
         private async void BeginWriting()
         {
         START:
-            while (!WritingToken.Token.IsCancellationRequested)
+            while (!this.WritingToken.Token.IsCancellationRequested)
             {
                 //Read log lines.
-                var lines = reader.GetFileContents();
+                System.Collections.Generic.List<string> lines = this.reader.GetFileContents();
 
                 //If loglines is null, read from log again.
                 if (lines == null)
@@ -78,15 +78,21 @@ namespace ComponentHandlerLibrary
 
                 foreach (var line in lines)
                 {
-                    AppendToScintilla(line);
-
+                    if (!this.WritingToken.Token.IsCancellationRequested)
+                    {
+                        AppendToScintilla(line);
+                    }
+                    else
+                    {
+                        break;
+                    }
                     await Task.Delay(10);
                 }
 
                 await Task.Delay(100);
             }
 
-            WritingToken.Dispose();
+            this.WritingToken.Dispose();
         }
 
         //Formats the string and pushes it to the Scintilla.
@@ -94,17 +100,17 @@ namespace ComponentHandlerLibrary
         {
             //Weird fix, but because of the asynchronous function BeginWriting() it runs before the AttachmentBinder is finished building the components.
             //This means that this function will fire before we get a reference to ScintillaParent.
-            if (ScintillaParent == null)
+            if (this.ScintillaParent == null)
             {
                 return;
             }
 
             //Get time, formats it and prints it to log. 
             var currentTime = DateTime.Now.ToString("hh:mm:ss") + ":" + DateTime.Now.Millisecond.ToString().PadRight(3, '0');
-            var formattedTime = String.Format("[{0}] ", currentTime);
+            var formattedTime = string.Format("[{0}] ", currentTime);
 
             //Appends text to console.
-            ScintillaParent.AppendText(true, formattedTime + logLine);
+            this.ScintillaParent.AppendText(true, formattedTime + logLine);
         }
 
     }

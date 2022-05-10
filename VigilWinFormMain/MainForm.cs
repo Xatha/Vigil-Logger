@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Drawing;
-using System.Windows.Forms;
 using System.IO;
-using ScintillaNET.Demo.Utils;
-using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using ComponentHandlerLibrary;
-using LexerStyleLibrary.Styles;
-using LogHandlerLibrary;
-using ScintillaNET;
-using UtilityLibrary;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using ComponentHandlerLibrary.ScintillaAttachmentHelper;
 using ComponentHandlerLibrary.Utils;
 using ComponentHandlerLibrary.Utils.Button;
+using ComponentHandlerLibrary.Utils.Components;
+using LexerStyleLibrary.Styles;
+using ScintillaNET;
+using ScintillaNET.Demo.Utils;
 using VigilWinFormMain.Components;
-using ComponentHandlerLibrary.ScintillaAttachmentHelper;
 
 namespace VigilWinFormMain
 {
@@ -26,8 +23,8 @@ namespace VigilWinFormMain
         public MainForm()
         {
             InitializeComponent();
-            TextArea = new ScintillaNET.Scintilla();
-            
+            this.TextArea = new ScintillaNET.Scintilla();
+
 
             // new ClearScintillaButtonComponent();
 
@@ -47,16 +44,16 @@ namespace VigilWinFormMain
         {
             this.WindowState = FormWindowState.Normal;
             // Addiing Properties
-            TabControlMain = tabControl1;
+            this.TabControlMain = this.tabControl1;
 
             // Initialise first-time objects and helpers.
-            new TabControlHelper(TabControlMain);
+            new TabControlHelper(this.TabControlMain);
 
-            new TabComponent(TabControlMain, new  ScintillaAttachmentBinder(new ScintillaComponent(), new ScintillaLogWriterSubComponent(null), new TestSubComponent()));
+            new TabComponent(this.TabControlMain, new ScintillaComponent());
 
             new ClearScintillaButtonComponent();
-            new StopLogWriterButtonComponent(TabControlMain);
-            new OpenTabButtonComponent(TabControlMain, OpenTabButtonUtil.OpenTabButtonPosition(), new Size(75, 25));
+            new StopLogWriterButtonComponent(this.TabControlMain);
+            new OpenTabButtonComponent(this.TabControlMain, OpenTabButtonUtil.OpenTabButtonPosition(), new Size(75, 25));
             new LogWriterTextBoxFilePath();
             // STYLING
             InitColors();
@@ -78,10 +75,7 @@ namespace VigilWinFormMain
 
         }
 
-        private void InitColors()
-        {
-            TextArea.SetSelectionBackColor(true, Util.IntToColor(0x114D9C));
-        }
+        private void InitColors() => this.TextArea.SetSelectionBackColor(true, Util.IntToColor(0x114D9C));
 
         private void InitHotkeys()
         {
@@ -98,11 +92,11 @@ namespace VigilWinFormMain
             HotKeyManager.AddHotKey(this, CloseSearch, Keys.Escape);
 
             // remove conflicting hotkeys from scintilla
-            TextArea.ClearCmdKey(Keys.Control | Keys.F);
-            TextArea.ClearCmdKey(Keys.Control | Keys.R);
-            TextArea.ClearCmdKey(Keys.Control | Keys.H);
-            TextArea.ClearCmdKey(Keys.Control | Keys.L);
-            TextArea.ClearCmdKey(Keys.Control | Keys.U);
+            this.TextArea.ClearCmdKey(Keys.Control | Keys.F);
+            this.TextArea.ClearCmdKey(Keys.Control | Keys.R);
+            this.TextArea.ClearCmdKey(Keys.Control | Keys.H);
+            this.TextArea.ClearCmdKey(Keys.Control | Keys.L);
+            this.TextArea.ClearCmdKey(Keys.Control | Keys.U);
 
         }
 
@@ -110,12 +104,12 @@ namespace VigilWinFormMain
         {
 
             // Configure the default style
-            TextArea.StyleResetDefault();
-            TextArea.Styles[Style.Default].Font = "Consolas";
-            TextArea.Styles[Style.Default].Size = 10;
-            TextArea.Styles[Style.Default].BackColor = Util.IntToColor(0x212121);
-            TextArea.Styles[Style.Default].ForeColor = Util.IntToColor(0xFFFFFF);
-            TextArea.StyleClearAll();
+            this.TextArea.StyleResetDefault();
+            this.TextArea.Styles[Style.Default].Font = "Consolas";
+            this.TextArea.Styles[Style.Default].Size = 10;
+            this.TextArea.Styles[Style.Default].BackColor = Util.IntToColor(0x212121);
+            this.TextArea.Styles[Style.Default].ForeColor = Util.IntToColor(0xFFFFFF);
+            this.TextArea.StyleClearAll();
 
             // Configure the CPP (C#) lexer styles
             //TextArea.Styles[Style.Cpp.Identifier].ForeColor = Util.IntToColor(0xD0DAE2);
@@ -135,39 +129,37 @@ namespace VigilWinFormMain
             //TextArea.Styles[Style.Cpp.CommentDocKeywordError].ForeColor = Util.IntToColor(0xFF0000);
             //TextArea.Styles[Style.Cpp.GlobalClass].ForeColor = Util.IntToColor(0x48A8EE);
 
-            TextArea.Styles[LoggingStyle.StyleDefault].ForeColor = Color.Wheat;
-            TextArea.Styles[LoggingStyle.StyleKeyword].ForeColor = Color.Blue;
-            TextArea.Styles[LoggingStyle.StyleIdentifier].ForeColor = Color.Teal;
-            TextArea.Styles[LoggingStyle.StyleNumber].ForeColor = Color.Purple;
-            TextArea.Styles[LoggingStyle.StyleString].ForeColor = Color.Red;
+            this.TextArea.Styles[LoggingStyle.StyleDefault].ForeColor = Color.Wheat;
+            this.TextArea.Styles[LoggingStyle.StyleKeyword].ForeColor = Color.Blue;
+            this.TextArea.Styles[LoggingStyle.StyleIdentifier].ForeColor = Color.Teal;
+            this.TextArea.Styles[LoggingStyle.StyleNumber].ForeColor = Color.Purple;
+            this.TextArea.Styles[LoggingStyle.StyleString].ForeColor = Color.Red;
 
-            TextArea.Styles[LoggingStyle.StyleDebug].ForeColor = Color.Orange;
+            this.TextArea.Styles[LoggingStyle.StyleDebug].ForeColor = Color.Orange;
 
-            TextArea.Styles[LoggingStyle.StyleInfo].ForeColor = Color.LightGray;
-            TextArea.Styles[LoggingStyle.StyleMessage].ForeColor = Color.SlateGray;
-            TextArea.Styles[LoggingStyle.StyleWarning].ForeColor = Color.Yellow;
-            TextArea.Styles[LoggingStyle.StyleError].ForeColor = Color.Red;
-            TextArea.Styles[LoggingStyle.StyleTime].ForeColor = Color.Green;
-            TextArea.Lexer = Lexer.Container;
+            this.TextArea.Styles[LoggingStyle.StyleInfo].ForeColor = Color.LightGray;
+            this.TextArea.Styles[LoggingStyle.StyleMessage].ForeColor = Color.SlateGray;
+            this.TextArea.Styles[LoggingStyle.StyleWarning].ForeColor = Color.Yellow;
+            this.TextArea.Styles[LoggingStyle.StyleError].ForeColor = Color.Red;
+            this.TextArea.Styles[LoggingStyle.StyleTime].ForeColor = Color.Green;
+            this.TextArea.Lexer = Lexer.Container;
 
             //TextArea.SetKeywords(0, "class extends implements import interface new case do while else if for in switch throw get set function var try catch finally while with default break continue delete return each const namespace package include use is as instanceof typeof author copy default deprecated eventType example exampleText exception haxe inheritDoc internal link mtasc mxmlc param private return see serial serialData serialField since throws usage version langversion playerversion productversion dynamic private public partial static intrinsic internal native override protected AS3 final super this arguments null Infinity NaN undefined true false abstract as base bool break by byte case catch char checked class const continue decimal default delegate do double descending explicit event extern else enum false finally fixed float for foreach from goto group if implicit in int interface internal into is lock long new null namespace object operator out override orderby params private protected public readonly ref return switch struct sbyte sealed short sizeof stackalloc static string select this throw true try typeof uint ulong unchecked unsafe ushort using var virtual volatile void while where yield");
             //TextArea.SetKeywords(1, "void Null ArgumentError arguments Array Boolean Class Date DefinitionError Error EvalError Function int Math Namespace Number Object RangeError ReferenceError RegExp SecurityError String SyntaxError TypeError uint XML XMLList Boolean Byte Char DateTime Decimal Double Int16 Int32 Int64 IntPtr SByte Single UInt16 UInt32 UInt64 UIntPtr Void Path File System Windows Forms ScintillaNET");
 
-            LoggingStyle loggingLexer = new LoggingStyle();
-            TextArea.StyleNeeded += (s, se) =>
+            var loggingLexer = new LoggingStyle();
+            this.TextArea.StyleNeeded += (s, se) =>
             {
-                var startPos = TextArea.GetEndStyled();
+                var startPos = this.TextArea.GetEndStyled();
                 var endPos = se.Position;
 
-                loggingLexer.Style(TextArea, startPos, endPos);
+                loggingLexer.Style(this.TextArea, startPos, endPos);
             };
         }
 
-        private void OnTextChanged(object sender, EventArgs e)
-        {
+        private void OnTextChanged(object sender, EventArgs e) =>
             //Auto Scrolling.
-            TextArea.LineScroll(TextArea.Lines.Count, 0);
-        }
+            this.TextArea.LineScroll(this.TextArea.Lines.Count, 0);
 
 
 
@@ -207,18 +199,18 @@ namespace VigilWinFormMain
         private void InitNumberMargin()
         {
 
-            TextArea.Styles[Style.LineNumber].BackColor = Util.IntToColor(BACK_COLOR);
-            TextArea.Styles[Style.LineNumber].ForeColor = Util.IntToColor(FORE_COLOR);
-            TextArea.Styles[Style.IndentGuide].ForeColor = Util.IntToColor(FORE_COLOR);
-            TextArea.Styles[Style.IndentGuide].BackColor = Util.IntToColor(BACK_COLOR);
+            this.TextArea.Styles[Style.LineNumber].BackColor = Util.IntToColor(BACK_COLOR);
+            this.TextArea.Styles[Style.LineNumber].ForeColor = Util.IntToColor(FORE_COLOR);
+            this.TextArea.Styles[Style.IndentGuide].ForeColor = Util.IntToColor(FORE_COLOR);
+            this.TextArea.Styles[Style.IndentGuide].BackColor = Util.IntToColor(BACK_COLOR);
 
-            var nums = TextArea.Margins[NUMBER_MARGIN];
+            Margin nums = this.TextArea.Margins[NUMBER_MARGIN];
             nums.Width = 30;
             nums.Type = MarginType.Number;
             nums.Sensitive = true;
             nums.Mask = 0;
 
-            TextArea.MarginClick += TextArea_MarginClick;
+            this.TextArea.MarginClick += TextArea_MarginClick;
         }
 
         private void InitBookmarkMargin()
@@ -226,14 +218,14 @@ namespace VigilWinFormMain
 
             //TextArea.SetFoldMarginColor(true, Util.IntToColor(BACK_COLOR));
 
-            var margin = TextArea.Margins[BOOKMARK_MARGIN];
+            Margin margin = this.TextArea.Margins[BOOKMARK_MARGIN];
             margin.Width = 20;
             margin.Sensitive = true;
             margin.Type = MarginType.Symbol;
             margin.Mask = (1 << BOOKMARK_MARKER);
             //margin.Cursor = MarginCursor.Arrow;
 
-            var marker = TextArea.Markers[BOOKMARK_MARKER];
+            Marker marker = this.TextArea.Markers[BOOKMARK_MARKER];
             marker.Symbol = MarkerSymbol.Circle;
             marker.SetBackColor(Util.IntToColor(0xFF003B));
             marker.SetForeColor(Util.IntToColor(0x000000));
@@ -244,37 +236,37 @@ namespace VigilWinFormMain
         private void InitCodeFolding()
         {
 
-            TextArea.SetFoldMarginColor(true, Util.IntToColor(BACK_COLOR));
-            TextArea.SetFoldMarginHighlightColor(true, Util.IntToColor(BACK_COLOR));
+            this.TextArea.SetFoldMarginColor(true, Util.IntToColor(BACK_COLOR));
+            this.TextArea.SetFoldMarginHighlightColor(true, Util.IntToColor(BACK_COLOR));
 
             // Enable code folding
-            TextArea.SetProperty("fold", "1");
-            TextArea.SetProperty("fold.compact", "1");
+            this.TextArea.SetProperty("fold", "1");
+            this.TextArea.SetProperty("fold.compact", "1");
 
             // Configure a margin to display folding symbols
-            TextArea.Margins[FOLDING_MARGIN].Type = MarginType.Symbol;
-            TextArea.Margins[FOLDING_MARGIN].Mask = Marker.MaskFolders;
-            TextArea.Margins[FOLDING_MARGIN].Sensitive = true;
-            TextArea.Margins[FOLDING_MARGIN].Width = 20;
+            this.TextArea.Margins[FOLDING_MARGIN].Type = MarginType.Symbol;
+            this.TextArea.Margins[FOLDING_MARGIN].Mask = Marker.MaskFolders;
+            this.TextArea.Margins[FOLDING_MARGIN].Sensitive = true;
+            this.TextArea.Margins[FOLDING_MARGIN].Width = 20;
 
             // Set colors for all folding markers
-            for (int i = 25; i <= 31; i++)
+            for (var i = 25; i <= 31; i++)
             {
-                TextArea.Markers[i].SetForeColor(Util.IntToColor(BACK_COLOR)); // styles for [+] and [-]
-                TextArea.Markers[i].SetBackColor(Util.IntToColor(FORE_COLOR)); // styles for [+] and [-]
+                this.TextArea.Markers[i].SetForeColor(Util.IntToColor(BACK_COLOR)); // styles for [+] and [-]
+                this.TextArea.Markers[i].SetBackColor(Util.IntToColor(FORE_COLOR)); // styles for [+] and [-]
             }
 
             // Configure folding markers with respective symbols
-            TextArea.Markers[Marker.Folder].Symbol = CODEFOLDING_CIRCULAR ? MarkerSymbol.CirclePlus : MarkerSymbol.BoxPlus;
-            TextArea.Markers[Marker.FolderOpen].Symbol = CODEFOLDING_CIRCULAR ? MarkerSymbol.CircleMinus : MarkerSymbol.BoxMinus;
-            TextArea.Markers[Marker.FolderEnd].Symbol = CODEFOLDING_CIRCULAR ? MarkerSymbol.CirclePlusConnected : MarkerSymbol.BoxPlusConnected;
-            TextArea.Markers[Marker.FolderMidTail].Symbol = MarkerSymbol.TCorner;
-            TextArea.Markers[Marker.FolderOpenMid].Symbol = CODEFOLDING_CIRCULAR ? MarkerSymbol.CircleMinusConnected : MarkerSymbol.BoxMinusConnected;
-            TextArea.Markers[Marker.FolderSub].Symbol = MarkerSymbol.VLine;
-            TextArea.Markers[Marker.FolderTail].Symbol = MarkerSymbol.LCorner;
+            this.TextArea.Markers[Marker.Folder].Symbol = CODEFOLDING_CIRCULAR ? MarkerSymbol.CirclePlus : MarkerSymbol.BoxPlus;
+            this.TextArea.Markers[Marker.FolderOpen].Symbol = CODEFOLDING_CIRCULAR ? MarkerSymbol.CircleMinus : MarkerSymbol.BoxMinus;
+            this.TextArea.Markers[Marker.FolderEnd].Symbol = CODEFOLDING_CIRCULAR ? MarkerSymbol.CirclePlusConnected : MarkerSymbol.BoxPlusConnected;
+            this.TextArea.Markers[Marker.FolderMidTail].Symbol = MarkerSymbol.TCorner;
+            this.TextArea.Markers[Marker.FolderOpenMid].Symbol = CODEFOLDING_CIRCULAR ? MarkerSymbol.CircleMinusConnected : MarkerSymbol.BoxMinusConnected;
+            this.TextArea.Markers[Marker.FolderSub].Symbol = MarkerSymbol.VLine;
+            this.TextArea.Markers[Marker.FolderTail].Symbol = MarkerSymbol.LCorner;
 
             // Enable automatic folding
-            TextArea.AutomaticFold = (AutomaticFold.Show | AutomaticFold.Click | AutomaticFold.Change);
+            this.TextArea.AutomaticFold = (AutomaticFold.Show | AutomaticFold.Click | AutomaticFold.Change);
 
         }
 
@@ -284,7 +276,7 @@ namespace VigilWinFormMain
             {
                 // Do we have a marker for this line?
                 const uint mask = (1 << BOOKMARK_MARKER);
-                var line = TextArea.Lines[TextArea.LineFromPosition(e.Position)];
+                Line line = this.TextArea.Lines[this.TextArea.LineFromPosition(e.Position)];
                 if ((line.MarkerGet() & mask) > 0)
                 {
                     // Remove existing bookmark
@@ -305,26 +297,30 @@ namespace VigilWinFormMain
         public void InitDragDropFile()
         {
 
-            TextArea.AllowDrop = true;
-            TextArea.DragEnter += delegate (object sender, DragEventArgs e)
+            this.TextArea.AllowDrop = true;
+            this.TextArea.DragEnter += delegate (object sender, DragEventArgs e)
             {
                 if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                {
                     e.Effect = DragDropEffects.Copy;
+                }
                 else
+                {
                     e.Effect = DragDropEffects.None;
+                }
             };
-            TextArea.DragDrop += delegate (object sender, DragEventArgs e)
+            this.TextArea.DragDrop += delegate (object sender, DragEventArgs e)
             {
 
                 // get file drop
                 if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 {
 
-                    Array a = (Array)e.Data.GetData(DataFormats.FileDrop);
+                    var a = (Array)e.Data.GetData(DataFormats.FileDrop);
                     if (a != null)
                     {
 
-                        string path = a.GetValue(0).ToString();
+                        var path = a.GetValue(0).ToString();
 
                         LoadDataFromFile(path);
 
@@ -349,126 +345,75 @@ namespace VigilWinFormMain
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            if (this.openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                LoadDataFromFile(openFileDialog.FileName);
+                LoadDataFromFile(this.openFileDialog.FileName);
             }
         }
 
-        private void findToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenSearch();
-        }
+        private void findToolStripMenuItem_Click(object sender, EventArgs e) => OpenSearch();
 
-        private void findDialogToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenFindDialog();
-        }
+        private void findDialogToolStripMenuItem_Click(object sender, EventArgs e) => OpenFindDialog();
 
-        private void findAndReplaceToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenReplaceDialog();
-        }
+        private void findAndReplaceToolStripMenuItem_Click(object sender, EventArgs e) => OpenReplaceDialog();
 
-        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            TextArea.Cut();
-        }
+        private void cutToolStripMenuItem_Click(object sender, EventArgs e) => this.TextArea.Cut();
 
-        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            TextArea.Copy();
-        }
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e) => this.TextArea.Copy();
 
-        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            TextArea.Paste();
-        }
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e) => this.TextArea.Paste();
 
-        private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            TextArea.SelectAll();
-        }
+        private void selectAllToolStripMenuItem_Click(object sender, EventArgs e) => this.TextArea.SelectAll();
 
         private void selectLineToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Line line = TextArea.Lines[TextArea.CurrentLine];
-            TextArea.SetSelection(line.Position + line.Length, line.Position);
+            Line line = this.TextArea.Lines[this.TextArea.CurrentLine];
+            this.TextArea.SetSelection(line.Position + line.Length, line.Position);
         }
 
-        private void clearSelectionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            TextArea.SetEmptySelection(0);
-        }
+        private void clearSelectionToolStripMenuItem_Click(object sender, EventArgs e) => this.TextArea.SetEmptySelection(0);
 
-        private void indentSelectionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Indent();
-        }
+        private void indentSelectionToolStripMenuItem_Click(object sender, EventArgs e) => Indent();
 
-        private void outdentSelectionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Outdent();
-        }
+        private void outdentSelectionToolStripMenuItem_Click(object sender, EventArgs e) => Outdent();
 
-        private void uppercaseSelectionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Uppercase();
-        }
+        private void uppercaseSelectionToolStripMenuItem_Click(object sender, EventArgs e) => Uppercase();
 
-        private void lowercaseSelectionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Lowercase();
-        }
+        private void lowercaseSelectionToolStripMenuItem_Click(object sender, EventArgs e) => Lowercase();
 
         private void wordWrapToolStripMenuItem1_Click(object sender, EventArgs e)
         {
 
             // toggle word wrap
-            wordWrapItem.Checked = !wordWrapItem.Checked;
-            TextArea.WrapMode = wordWrapItem.Checked ? WrapMode.Word : WrapMode.None;
+            this.wordWrapItem.Checked = !this.wordWrapItem.Checked;
+            this.TextArea.WrapMode = this.wordWrapItem.Checked ? WrapMode.Word : WrapMode.None;
         }
 
         private void indentGuidesToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
             // toggle indent guides
-            indentGuidesItem.Checked = !indentGuidesItem.Checked;
-            TextArea.IndentationGuides = indentGuidesItem.Checked ? IndentView.LookBoth : IndentView.None;
+            this.indentGuidesItem.Checked = !this.indentGuidesItem.Checked;
+            this.TextArea.IndentationGuides = this.indentGuidesItem.Checked ? IndentView.LookBoth : IndentView.None;
         }
 
         private void hiddenCharactersToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
             // toggle view whitespace
-            hiddenCharactersItem.Checked = !hiddenCharactersItem.Checked;
-            TextArea.ViewWhitespace = hiddenCharactersItem.Checked ? WhitespaceMode.VisibleAlways : WhitespaceMode.Invisible;
+            this.hiddenCharactersItem.Checked = !this.hiddenCharactersItem.Checked;
+            this.TextArea.ViewWhitespace = this.hiddenCharactersItem.Checked ? WhitespaceMode.VisibleAlways : WhitespaceMode.Invisible;
         }
 
-        private void zoomInToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ZoomIn();
-        }
+        private void zoomInToolStripMenuItem_Click(object sender, EventArgs e) => ZoomIn();
 
-        private void zoomOutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ZoomOut();
-        }
+        private void zoomOutToolStripMenuItem_Click(object sender, EventArgs e) => ZoomOut();
 
-        private void zoom100ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ZoomDefault();
-        }
+        private void zoom100ToolStripMenuItem_Click(object sender, EventArgs e) => ZoomDefault();
 
-        private void collapseAllToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            TextArea.FoldAll(FoldAction.Contract);
-        }
+        private void collapseAllToolStripMenuItem_Click(object sender, EventArgs e) => this.TextArea.FoldAll(FoldAction.Contract);
 
-        private void expandAllToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            TextArea.FoldAll(FoldAction.Expand);
-        }
+        private void expandAllToolStripMenuItem_Click(object sender, EventArgs e) => this.TextArea.FoldAll(FoldAction.Expand);
 
 
         #endregion
@@ -479,52 +424,48 @@ namespace VigilWinFormMain
         {
 
             // save the selection
-            int start = TextArea.SelectionStart;
-            int end = TextArea.SelectionEnd;
+            var start = this.TextArea.SelectionStart;
+            var end = this.TextArea.SelectionEnd;
 
             // modify the selected text
-            TextArea.ReplaceSelection(TextArea.GetTextRange(start, end - start).ToLower());
+            this.TextArea.ReplaceSelection(this.TextArea.GetTextRange(start, end - start).ToLower());
 
             // preserve the original selection
-            TextArea.SetSelection(start, end);
+            this.TextArea.SetSelection(start, end);
         }
 
         private void Uppercase()
         {
 
             // save the selection
-            int start = TextArea.SelectionStart;
-            int end = TextArea.SelectionEnd;
+            var start = this.TextArea.SelectionStart;
+            var end = this.TextArea.SelectionEnd;
 
             // modify the selected text
-            TextArea.ReplaceSelection(TextArea.GetTextRange(start, end - start).ToUpper());
+            this.TextArea.ReplaceSelection(this.TextArea.GetTextRange(start, end - start).ToUpper());
 
             // preserve the original selection
-            TextArea.SetSelection(start, end);
+            this.TextArea.SetSelection(start, end);
         }
 
         #endregion
 
         #region Indent / Outdent
 
-        private void Indent()
-        {
+        private void Indent() =>
             // we use this hack to send "Shift+Tab" to scintilla, since there is no known API to indent,
             // although the indentation function exists. Pressing TAB with the editor focused confirms this.
             GenerateKeystrokes("{TAB}");
-        }
 
-        private void Outdent()
-        {
+        private void Outdent() =>
             // we use this hack to send "Shift+Tab" to scintilla, since there is no known API to outdent,
             // although the indentation function exists. Pressing Shift+Tab with the editor focused confirms this.
             GenerateKeystrokes("+{TAB}");
-        }
 
         private void GenerateKeystrokes(string keys)
         {
             HotKeyManager.Enable = false;
-            TextArea.Focus();
+            this.TextArea.Focus();
             SendKeys.Send(keys);
             HotKeyManager.Enable = true;
         }
@@ -533,84 +474,63 @@ namespace VigilWinFormMain
 
         #region Zoom
 
-        private void ZoomIn()
-        {
-            TextArea.ZoomIn();
-        }
+        private void ZoomIn() => this.TextArea.ZoomIn();
 
-        private void ZoomOut()
-        {
-            TextArea.ZoomOut();
-        }
+        private void ZoomOut() => this.TextArea.ZoomOut();
 
-        private void ZoomDefault()
-        {
-            TextArea.Zoom = 0;
-        }
+        private void ZoomDefault() => this.TextArea.Zoom = 0;
 
 
         #endregion
 
         #region Quick Search Bar
 
-        bool SearchIsOpen = false;
+        private bool SearchIsOpen = false;
 
         private void OpenSearch()
         {
 
-            SearchManager.SearchBox = TxtSearch;
-            SearchManager.TextArea = TextArea;
+            SearchManager.SearchBox = this.TxtSearch;
+            SearchManager.TextArea = this.TextArea;
 
-            if (!SearchIsOpen)
+            if (!this.SearchIsOpen)
             {
-                SearchIsOpen = true;
+                this.SearchIsOpen = true;
                 InvokeIfNeeded(delegate ()
                 {
-                    PanelSearch.Visible = true;
-                    TxtSearch.Text = SearchManager.LastSearch;
-                    TxtSearch.Focus();
-                    TxtSearch.SelectAll();
+                    this.PanelSearch.Visible = true;
+                    this.TxtSearch.Text = SearchManager.LastSearch;
+                    this.TxtSearch.Focus();
+                    this.TxtSearch.SelectAll();
                 });
             }
             else
             {
                 InvokeIfNeeded(delegate ()
                 {
-                    TxtSearch.Focus();
-                    TxtSearch.SelectAll();
+                    this.TxtSearch.Focus();
+                    this.TxtSearch.SelectAll();
                 });
             }
         }
         private void CloseSearch()
         {
-            if (SearchIsOpen)
+            if (this.SearchIsOpen)
             {
-                SearchIsOpen = false;
+                this.SearchIsOpen = false;
                 InvokeIfNeeded(delegate ()
                 {
-                    PanelSearch.Visible = false;
+                    this.PanelSearch.Visible = false;
                     //CurBrowser.GetBrowser().StopFinding(true);
                 });
             }
         }
 
-        private void BtnClearSearch_Click(object sender, EventArgs e)
-        {
-            CloseSearch();
-        }
+        private void BtnClearSearch_Click(object sender, EventArgs e) => CloseSearch();
 
-        private void BtnPrevSearch_Click(object sender, EventArgs e)
-        {
-            SearchManager.Find(false, false);
-        }
-        private void BtnNextSearch_Click(object sender, EventArgs e)
-        {
-            SearchManager.Find(true, false);
-        }
-        private void TxtSearch_TextChanged(object sender, EventArgs e)
-        {
-            SearchManager.Find(true, true);
-        }
+        private void BtnPrevSearch_Click(object sender, EventArgs e) => SearchManager.Find(false, false);
+        private void BtnNextSearch_Click(object sender, EventArgs e) => SearchManager.Find(true, false);
+        private void TxtSearch_TextChanged(object sender, EventArgs e) => SearchManager.Find(true, true);
 
         private void TxtSearch_KeyDown(object sender, KeyEventArgs e)
         {
@@ -643,7 +563,7 @@ namespace VigilWinFormMain
         {
             if (this.InvokeRequired)
             {
-                this.BeginInvoke(action);
+                BeginInvoke(action);
             }
             else
             {
@@ -653,11 +573,39 @@ namespace VigilWinFormMain
 
         private void metroTextBox1_Click(object sender, EventArgs e)
         {
-        
+
         }
 
         private void FileName_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            var scintillaComponents = ComponentCollections.ScintillaComponentCollection;
+            Console.WriteLine("cD");
+            if (checkBox1.Checked)
+            {
+                Console.WriteLine("kek");
+                foreach (var scintillaComponent in scintillaComponents)
+                {
+                    scintillaComponent.StartAutoscrolling();
+                }
+            }
+            else
+            {
+                Console.WriteLine("lmao");
+                foreach (var scintillaComponent in scintillaComponents)
+                {
+                    scintillaComponent.StopAutoscrolling();
+                }
+            }
 
         }
     }

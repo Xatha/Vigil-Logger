@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ComponentHandlerLibrary;
 using ComponentHandlerLibrary.Utils.Components;
-using ScintillaNET;
 
 namespace VigilWinFormMain.Components
 {
@@ -22,41 +18,19 @@ namespace VigilWinFormMain.Components
             SetEvents();
         }
 
-        protected override void Destroy()
-        {
-            this.Dispose();
-        }
+        protected override void Destroy() => Dispose();
 
         protected override void SetEvents()
         {
-            this.parentTabControl.Selected += event_ParentTabControl_Selecting_ChangeText;
-     
             this.Click += event_StopLogWriterButtonComponent_Click_StopLogWriterComponent;
         }
 
-        //Fix this later
-        private void event_ParentTabControl_Selecting_ChangeText(object sender, TabControlEventArgs e)
-        {
-            var LogWriterComponents = TabComponentUtils.GetControlsOfTypeFromSelectedTab<ScintillaLogWriterSubComponent>();
-
-            foreach (var LogWriterComponent in LogWriterComponents)
-            {
-                if (LogWriterComponent.WritingToken.IsCancellationRequested)
-                {
-                    this.Text = "Resume Logging";
-                }
-                else
-                {
-                    this.Text = "Stop Logging";
-                }
-            }
-        }
 
         private void event_StopLogWriterButtonComponent_Click_StopLogWriterComponent(object sender, EventArgs e)
         {
-            var LogWriterComponents = TabComponentUtils.GetControlsOfTypeFromSelectedTab<ScintillaLogWriterSubComponent>();
+            List<ScintillaLogWriterSubComponent> LogWriterComponents = TabComponentUtils.GetControlsOfTypeFromSelectedTab<ScintillaLogWriterSubComponent>();
 
-            foreach (var LogWriterComponent in LogWriterComponents)
+            foreach (ScintillaLogWriterSubComponent LogWriterComponent in LogWriterComponents)
             {
                 if (!LogWriterComponent.WritingToken.IsCancellationRequested)
                 {
@@ -66,10 +40,7 @@ namespace VigilWinFormMain.Components
         }
 
 
-        protected override void ClearEvents()
-        {
-            throw new NotImplementedException();
-        }
+        protected override void ClearEvents() => throw new NotImplementedException();
 
 
     }

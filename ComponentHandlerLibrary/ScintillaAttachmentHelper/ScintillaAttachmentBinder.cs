@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using ScintillaNET;
 
 namespace ComponentHandlerLibrary.ScintillaAttachmentHelper
@@ -12,13 +11,13 @@ namespace ComponentHandlerLibrary.ScintillaAttachmentHelper
 
         public ScintillaAttachmentBinder(Scintilla scintilla, params ScintillaSubComponentBase[] scintillaSubComponents)
         {
-            ScintillaComponent = scintilla;
+            this.ScintillaComponent = scintilla;
             AttachSubComponentsToParent(scintilla, scintillaSubComponents);
         }
 
         private void AttachSubComponentsToParent(Scintilla scintilla, ScintillaSubComponentBase[] scintillaSubComponents)
         {
-            foreach (var scintillaSubComponent in scintillaSubComponents)
+            foreach (ScintillaSubComponentBase scintillaSubComponent in scintillaSubComponents)
             {
                 SetProperties(scintilla, scintillaSubComponent);
                 scintillaSubComponent.ScintillaParent = scintilla;
@@ -26,10 +25,7 @@ namespace ComponentHandlerLibrary.ScintillaAttachmentHelper
             }
         }
 
-        private void SetProperties(Scintilla scintilla, ScintillaSubComponentBase scintillaSubComponent)
-        {
-            SubComponents.Add(scintillaSubComponent);
-        }
+        private void SetProperties(Scintilla scintilla, ScintillaSubComponentBase scintillaSubComponent) => this.SubComponents.Add(scintillaSubComponent);
 
 
 

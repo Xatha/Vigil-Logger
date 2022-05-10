@@ -30,7 +30,7 @@ namespace ComponentHandlerLibrary
             this.ScrollWidthTracking = true;
 
             // INITIAL VIEW CONFIG
-            this.WrapMode = WrapMode.None;
+            this.WrapMode = WrapMode.Word;
             this.IndentationGuides = IndentView.LookBoth;
             ComponentCollections.ScintillaComponentCollection.Add(this);
 
@@ -41,7 +41,7 @@ namespace ComponentHandlerLibrary
             //Auto scrolling
             this.TextChanged += (sender, e) =>
             {
-                this.LineScroll(this.Lines.Count, 0);
+                LineScroll(this.Lines.Count, 0);
             };
 
             ComponentCollections.ScintillaComponentCollection.Add(this);
@@ -54,7 +54,7 @@ namespace ComponentHandlerLibrary
 
         private void CreateScintilla(Point location, Size size, string text, AnchorStyles anchor)
         {
-            var scintilla = this;
+            ScintillaComponent scintilla = this;
 
             //Set the objects parameters.
             scintilla.Name = $"Scintilla{ComponentCollections.ScintillaComponentCollection.Count}";
@@ -73,20 +73,20 @@ namespace ComponentHandlerLibrary
             TruncateEvents();
 
             //Dispose of TabComponent. 
-            this.Dispose(true);
+            Dispose(true);
         }
 
         //Sets style colorcoding for the object's Scintilla.  
         private void ApplyStyling()
         {
-            this.StyleResetDefault();
+            StyleResetDefault();
             this.Styles[Style.Default].Font = "Consolas";
             this.Styles[Style.Default].Size = 10;
             this.Styles[Style.Default].BackColor = Util.IntToColor(0x212121);
             this.Styles[Style.Default].ForeColor = Util.IntToColor(0xFFFFFF);
 
             this.CaretForeColor = Util.IntToColor(0xFFFFFF);
-            this.StyleClearAll();
+            StyleClearAll();
 
             this.Styles[LoggingStyle.StyleDefault].ForeColor = Color.White;
             this.Styles[LoggingStyle.StyleDebug].ForeColor = Color.Orange;
@@ -97,11 +97,13 @@ namespace ComponentHandlerLibrary
             this.Styles[LoggingStyle.StyleTime].ForeColor = Color.Green;
             this.Lexer = Lexer.Container;
 
-            LoggingStyle lexer = new LoggingStyle();
+            var lexer = new LoggingStyle();
+
+            lexer.InitNumberMargin(this);
 
             this.StyleNeeded += (s, se) =>
             {
-                var startPos = this.GetEndStyled();
+                var startPos = GetEndStyled();
                 var endPos = se.Position;
 
                 lexer.Style(this, startPos, endPos);
@@ -109,24 +111,16 @@ namespace ComponentHandlerLibrary
         }
 
         #region EVENTS
-        protected void AppendEvents()
-        {
+        public void StopAutoscrolling() => this.TextChanged -= event_ScintillaComponent_TextChanged_AutoScroll;
+        public void StartAutoscrolling() => this.TextChanged += event_ScintillaComponent_TextChanged_AutoScroll;
+
+        protected void AppendEvents() => this.TextChanged += event_ScintillaComponent_TextChanged_AutoScroll;
+
+        protected void TruncateEvents() => this.TextChanged -= event_ScintillaComponent_TextChanged_AutoScroll;
+
+        private void event_ScintillaComponent_TextChanged_AutoScroll(object sender, EventArgs e) =>
             //Auto scrolling
-            this.TextChanged += event_ScintillaComponent_TextChanged_AutoScroll;
-        }
-
-        protected void TruncateEvents()
-        {
-            this.TextChanged -= event_ScintillaComponent_TextChanged_AutoScroll;
-
-        }
-
-        private void event_ScintillaComponent_TextChanged_AutoScroll(object sender, EventArgs e)
-        {
-            //Auto scrolling
-            this.LineScroll(this.Lines.Count, 0);
-            
-        }
+            LineScroll(this.Lines.Count, 0);
 
         #endregion
     }

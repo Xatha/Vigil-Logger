@@ -7,10 +7,7 @@ namespace ComponentHandlerLibrary
     {
         public virtual TabComponent ParentTabComponent { get; set; }
 
-        public ButtonComponentBase(Color backColor, Color ForeColor, Point location, Size size, string name, string buttonText, AnchorStyles anchor)
-        {
-            Initialize(backColor, ForeColor, location, size, name, buttonText, anchor);
-        }
+        public ButtonComponentBase(Color backColor, Color ForeColor, Point location, Size size, string name, string buttonText, AnchorStyles anchor) => Initialize(backColor, ForeColor, location, size, name, buttonText, anchor);
         protected virtual void Initialize(Color backColor, Color ForeColor, Point location, Size size, string name, string buttonText, AnchorStyles anchor)
         {
             CreateButton(backColor, ForeColor, location, size, name, buttonText, anchor);
@@ -19,7 +16,7 @@ namespace ComponentHandlerLibrary
 
         protected virtual void CreateButton(Color backColor, Color ForeColor, Point location, Size size, string name, string buttonText, AnchorStyles anchor)
         {
-            var button = this;
+            ButtonComponentBase button = this;
 
             button.BackColor = backColor;
             button.ForeColor = ForeColor;

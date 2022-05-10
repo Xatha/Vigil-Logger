@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace UtilityLibrary
@@ -13,7 +7,7 @@ namespace UtilityLibrary
     {
         public static T FindControlFromLocation<T>(this TabControl TabControl, Point location) where T : TabPage
         {
-            var controlCollection = TabControl.Controls;
+            Control.ControlCollection controlCollection = TabControl.Controls;
 
             foreach (Control control in controlCollection)
             {

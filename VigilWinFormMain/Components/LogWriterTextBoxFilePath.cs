@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ComponentHandlerLibrary;
 using ComponentHandlerLibrary.ScintillaAttachmentHelper;
@@ -30,21 +27,18 @@ namespace VigilWinFormMain.Components
 
         private void PushFilePathToLogWriter(string filePath)
         {
-            var currentlySelectedTab = TabComponentUtils.GetCurrentlySelectedTabComponent();
+            TabComponent currentlySelectedTab = TabComponentUtils.GetCurrentlySelectedTabComponent();
             ComponentDestructionHandler.DestroySubComponentofType<ScintillaLogWriterSubComponent>(currentlySelectedTab);
 
             Console.WriteLine(currentlySelectedTab.ChildrenObjectsComponents.OfType<Scintilla>().First());
             currentlySelectedTab.Add(new ScintillaAttachmentBinder(currentlySelectedTab.ChildrenObjectsComponents.OfType<Scintilla>().First(),
-                                     new ScintillaLogWriterSubComponent(@filePath) { FilePath = @filePath }));
+                                     new ScintillaLogWriterSubComponent(@filePath)));
 
         }
 
 
 
-        private void AppendEvents()
-        {
-            this.KeyDown += LogWriterTextBoxFilePath_KeyDown_OnEnter;
-        }
+        private void AppendEvents() => this.KeyDown += LogWriterTextBoxFilePath_KeyDown_OnEnter;
 
 
         private void LogWriterTextBoxFilePath_KeyDown_OnEnter(object sender, KeyEventArgs e)

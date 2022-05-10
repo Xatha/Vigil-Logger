@@ -28,7 +28,7 @@ namespace ComponentHandlerLibrary.ScintillaAttachmentHelper
 
         private void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!this.disposedValue)
             {
                 if (disposing)
                 {
@@ -37,7 +37,7 @@ namespace ComponentHandlerLibrary.ScintillaAttachmentHelper
 
                 // TODO: free unmanaged resources (unmanaged objects) and override finalizer
                 // TODO: set large fields to null
-                disposedValue = true;
+                this.disposedValue = true;
             }
         }
     }

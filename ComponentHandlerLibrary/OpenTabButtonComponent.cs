@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ComponentHandlerLibrary.ScintillaAttachmentHelper;
-using ComponentHandlerLibrary.Utils;
-using ScintillaNET;
 
 namespace ComponentHandlerLibrary
 {
@@ -22,7 +16,7 @@ namespace ComponentHandlerLibrary
 
             CreateButon(location, size);
             AppendEvents();
-            this.BringToFront();
+            BringToFront();
         }
 
         ~OpenTabButtonComponent()
@@ -32,12 +26,12 @@ namespace ComponentHandlerLibrary
 
         private void CreateButon(Point location, Size size)
         {
-            var button = this;
+            OpenTabButtonComponent button = this;
 
             button.BackColor = System.Drawing.Color.Black;
             button.ForeColor = System.Drawing.Color.Black;
             button.Name = $"button{ComponentCollections.CloseTabButtonComponentCollection.Count}";
-            button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
+            button.Anchor = (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left);
             button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             button.Location = location;
             button.Size = size;
@@ -68,8 +62,8 @@ namespace ComponentHandlerLibrary
         {
             this.Click += event_onClickRemoveComponentAndParent;
             //tabControl.ControlRemoved += even_TabControl_TabIndexChanged_UpdateButton;
-            tabControl.ControlAdded += even_TabControl_TabIndexChanged_UpdateButtonAdded;
-            tabControl.ControlRemoved += even_TabControl_TabIndexChanged_UpdateButtonRemoved;
+            this.tabControl.ControlAdded += even_TabControl_TabIndexChanged_UpdateButtonAdded;
+            this.tabControl.ControlRemoved += even_TabControl_TabIndexChanged_UpdateButtonRemoved;
         }
 
         private void even_TabControl_TabIndexChanged_UpdateButtonAdded(object sender, EventArgs e)
@@ -88,8 +82,7 @@ namespace ComponentHandlerLibrary
         {
             Console.WriteLine("Clicked!");
 
-            new TabComponent(tabControl, new CloseTabButtonComponent(), new ScintillaAttachmentBinder(new ScintillaComponent(),
-                                                                                                       new ScintillaLogWriterSubComponent(null)));
+            new TabComponent(this.tabControl, new CloseTabButtonComponent(),new ScintillaComponent());
         }
         #endregion
     }

@@ -7,7 +7,7 @@
         /// </summary>
         public static void AppendText(this ScintillaNET.Scintilla scintilla, bool newLine = false, params string[] text)
         {
-            string joinedString = string.Join(" ", text);
+            var joinedString = string.Join(" ", text);
 
             scintilla.AppendText(joinedString);
 
@@ -16,9 +16,6 @@
                 NewLine(scintilla);
             }
         }
-        private static void NewLine(ScintillaNET.Scintilla scintilla)
-        {
-            scintilla.AppendText("\r");
-        }
+        private static void NewLine(ScintillaNET.Scintilla scintilla) => scintilla.AppendText("\r");
     }
 }
