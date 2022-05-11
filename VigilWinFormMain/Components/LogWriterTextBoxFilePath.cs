@@ -30,7 +30,6 @@ namespace VigilWinFormMain.Components
             TabComponent currentlySelectedTab = TabComponentUtils.GetCurrentlySelectedTabComponent();
             ComponentDestructionHandler.DestroySubComponentofType<ScintillaLogWriterSubComponent>(currentlySelectedTab);
 
-            Console.WriteLine(currentlySelectedTab.ChildrenObjectsComponents.OfType<Scintilla>().First());
             currentlySelectedTab.Add(new ScintillaAttachmentBinder(currentlySelectedTab.ChildrenObjectsComponents.OfType<Scintilla>().First(),
                                      new ScintillaLogWriterSubComponent(@filePath)));
 
@@ -45,7 +44,6 @@ namespace VigilWinFormMain.Components
         {
             if (e.KeyCode == Keys.Enter)
             {
-                Console.WriteLine($"Pushing text: { this.Text }");
                 PushFilePathToLogWriter(this.Text);
             }
         }

@@ -589,10 +589,9 @@ namespace VigilWinFormMain
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             var scintillaComponents = ComponentCollections.ScintillaComponentCollection;
-            Console.WriteLine("cD");
+
             if (checkBox1.Checked)
             {
-                Console.WriteLine("kek");
                 foreach (var scintillaComponent in scintillaComponents)
                 {
                     scintillaComponent.StartAutoscrolling();
@@ -600,7 +599,6 @@ namespace VigilWinFormMain
             }
             else
             {
-                Console.WriteLine("lmao");
                 foreach (var scintillaComponent in scintillaComponents)
                 {
                     scintillaComponent.StopAutoscrolling();

@@ -175,12 +175,10 @@ namespace ComponentHandlerLibrary
             if (this.tabControl.SelectedTab == this)
             {
                 this.IsSelected = true;
-                Console.WriteLine($"Selected tab is {this}");
             }
             else
             {
                 this.IsSelected = false;
-                Console.WriteLine($"{this.IsSelected}");
             }
         }
 

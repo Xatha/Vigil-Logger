@@ -48,7 +48,6 @@ namespace ComponentHandlerLibrary
         {
             //Some logic to determine the placement of the button. This was painful to make.
             var thisTabCountIndex = ComponentCollections.TabComponentCollection.Count + multiplier;
-            Console.WriteLine(thisTabCountIndex);
             var movePosPerTab = 48 * (thisTabCountIndex + 1);
             var tabPos = Point.Add(new Point((10 + movePosPerTab - 20 + 15), 92), new Size(0, 0));
 
@@ -68,20 +67,16 @@ namespace ComponentHandlerLibrary
 
         private void even_TabControl_TabIndexChanged_UpdateButtonAdded(object sender, EventArgs e)
         {
-            Console.WriteLine("Tab index changed!!");
             Update();
         }
 
         private void even_TabControl_TabIndexChanged_UpdateButtonRemoved(object sender, EventArgs e)
         {
-            Console.WriteLine("Tab index changed!!");
             Update(-1);
         }
 
         private void event_onClickRemoveComponentAndParent(object sender, EventArgs e)
         {
-            Console.WriteLine("Clicked!");
-
             new TabComponent(this.tabControl, new CloseTabButtonComponent(),new ScintillaComponent());
         }
         #endregion

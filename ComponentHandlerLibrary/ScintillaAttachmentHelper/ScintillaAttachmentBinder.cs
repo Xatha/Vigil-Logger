@@ -21,7 +21,6 @@ namespace ComponentHandlerLibrary.ScintillaAttachmentHelper
             {
                 SetProperties(scintilla, scintillaSubComponent);
                 scintillaSubComponent.ScintillaParent = scintilla;
-                Console.WriteLine($"Parent Scintilla for Sub Component {scintillaSubComponent} is {scintillaSubComponent.ScintillaParent}");
             }
         }
 

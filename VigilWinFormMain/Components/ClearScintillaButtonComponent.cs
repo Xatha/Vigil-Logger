@@ -23,8 +23,6 @@ namespace VigilWinFormMain.Components
 
         private void event_ClearScintillaButtonComponent_Click_ClearSelectedTabContent(object sender, EventArgs e)
         {
-            Console.WriteLine($"Click!");
-
             TabComponent currentlySelectedTab = TabComponentUtils.GetCurrentlySelectedTabComponent();
 
             System.Collections.Generic.IEnumerable<Scintilla> scintillaChildren = currentlySelectedTab.ChildrenObjectsComponents.OfType<Scintilla>();
